@@ -101,9 +101,12 @@ const About = () => {
                                 Today, I specialize in <strong className="text-white">Full-Stack Development</strong>, creating robust applications that blend performance with intuitive design. I thrive on tackling real-world challenges, constantly pushing the boundaries of what's possible through code.
                             </p>
                             <div className="pt-4">
-                                <a href="#contact" className="inline-block px-8 py-3 rounded-full border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 transition-colors font-medium cursor-pointer">
+                                <button
+                                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                                    className="inline-block px-8 py-3 rounded-full border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 transition-colors font-medium cursor-pointer"
+                                >
                                     Let's Connect
-                                </a>
+                                </button>
                             </div>
                         </motion.div>
 
