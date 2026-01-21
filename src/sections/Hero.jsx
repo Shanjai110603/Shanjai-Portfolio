@@ -21,6 +21,30 @@ const Hero = () => {
         visible: { transition: { staggerChildren: 0.2 } }
     };
 
+    const heroTextContainer = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const heroLetterVariant = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                damping: 12,
+                stiffness: 100
+            }
+        }
+    };
+
     return (
         <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
             {/* Background Gradients */}
@@ -63,8 +87,34 @@ const Hero = () => {
                             Open to Work & Looking for Freelance Opportunities
                         </motion.div>
 
-                        <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                            Hi, I'm <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">Shanjai S</span>
+                        <motion.h1
+                            variants={heroTextContainer}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-5xl md:text-7xl font-bold mb-6 leading-tight flex flex-wrap gap-x-4 gap-y-2"
+                        >
+                            <span className="flex">
+                                {Array.from("Hi, I'm").map((char, index) => (
+                                    <motion.span
+                                        key={index}
+                                        variants={heroLetterVariant}
+                                        className="inline-block"
+                                    >
+                                        {char === " " ? "\u00A0" : char}
+                                    </motion.span>
+                                ))}
+                            </span>
+                            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent pb-2 pr-2">
+                                {Array.from("Shanjai S").map((char, index) => (
+                                    <motion.span
+                                        key={index}
+                                        variants={heroLetterVariant}
+                                        className="inline-block"
+                                    >
+                                        {char === " " ? "\u00A0" : char}
+                                    </motion.span>
+                                ))}
+                            </span>
                         </motion.h1>
 
                         <div className="text-2xl md:text-3xl text-gray-300 font-light mb-8 h-[80px] md:h-auto">
@@ -89,13 +139,22 @@ const Hero = () => {
                         </motion.p>
 
                         <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                            <a
-                                href="#projects"
-                                className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 group"
+                            <button
+                                onClick={() => {
+                                    const element = document.getElementById('projects');
+                                    if (element) {
+                                        const offsetTop = element.offsetTop;
+                                        window.scrollTo({
+                                            top: offsetTop,
+                                            behavior: 'smooth'
+                                        });
+                                    }
+                                }}
+                                className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 group cursor-pointer focus:outline-none"
                             >
                                 View Projects
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                            </a>
+                            </button>
 
                             <a
                                 href="/Shanjai_S_Resume.pdf"
