@@ -95,9 +95,9 @@ const Projects = () => {
                     {projects.map((project, index) => (
                         <Tilt key={project.id ?? index} tiltMaxAngleX={4} tiltMaxAngleY={4} scale={1} transitionSpeed={2000}>
                             <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                initial={{ opacity: 0, y: 40, rotateX: -15, scale: 0.95 }}
+                                whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+                                transition={{ duration: 0.6, delay: index * 0.1, type: 'spring', damping: 20, stiffness: 100 }}
                                 viewport={{ once: true }}
                                 className="group relative bg-gray-950 rounded-2xl border border-white/8 overflow-hidden cursor-pointer hover:border-white/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-colors duration-200 h-full"
                                 style={{ backdropFilter: 'blur(12px)' }}

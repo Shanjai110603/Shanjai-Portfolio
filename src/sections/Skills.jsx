@@ -159,9 +159,9 @@ const Skills = () => {
                         return (
                             <motion.div
                                 key={category.id || category.category}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: catIndex * 0.1 }}
+                                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.5, delay: catIndex * 0.12, type: 'spring', damping: 20, stiffness: 120 }}
                                 viewport={{ once: true }}
                                 className={`p-6 rounded-2xl bg-gray-950 bg-gradient-to-br border backdrop-blur-sm cursor-pointer hover:brightness-110 transition-all duration-200 ${theme.grad}`}
                             >

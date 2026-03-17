@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchPortfolioData } from './lib/api';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -14,11 +14,13 @@ import Contact from './sections/Contact';
 import Footer from './components/Footer';
 import FloatingContact from './components/FloatingContact';
 import ScrollToTop from './components/ScrollToTop';
-import AdminApp from './admin/AdminApp';
 import LoadingScreen from './components/LoadingScreen';
-import AllProjects from './pages/AllProjects';
 import AnimatedBackground from './components/AnimatedBackground';
+import CustomCursor from './components/CustomCursor';
 import { SITEINFO_KEY, defaultSiteInfo } from './admin/tabs/SiteInfoTab';
+
+const AdminApp = lazy(() => import('./admin/AdminApp'));
+const AllProjects = lazy(() => import('./pages/AllProjects'));
 
 // Read current settings synchronously from localStorage so theme applies instantly
 const getInitialSettings = () => {
@@ -53,6 +55,7 @@ const Portfolio = () => {
 
   return (
     <div className={themeClass}>
+      <CustomCursor />
       {globalSettings.enableAnimatedBackground && <AnimatedBackground />}
       <Navbar />
       <main className="relative z-10">
@@ -75,12 +78,14 @@ const Portfolio = () => {
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/projects" element={<AllProjects />} />
-        <Route path="/admin" element={<AdminApp />} />
-        <Route path="/admin/*" element={<AdminApp />} />
-      </Routes>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/projects" element={<AllProjects />} />
+          <Route path="/admin" element={<AdminApp />} />
+          <Route path="/admin/*" element={<AdminApp />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

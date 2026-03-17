@@ -60,6 +60,27 @@ const getHeroData = () => {
 
 export { defaultHeroData };
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.3
+        }
+    }
+};
+
+const childVariants = {
+    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
+    visible: { 
+        opacity: 1, 
+        y: 0, 
+        filter: 'blur(0px)',
+        transition: { type: 'spring', damping: 12, stiffness: 200 } 
+    }
+};
+
 const Hero = () => {
     const data = getHeroData();
 
@@ -124,19 +145,28 @@ const Hero = () => {
                             <span className="text-emerald-400 text-sm font-medium">{data.statusBadge}</span>
                         </motion.div>
 
-                        {/* Name */}
+                        {/* Name & Greeting */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.7 }}
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
                         >
-                            <p className="text-gray-400 text-lg font-medium mb-2 tracking-wide">{data.greeting}</p>
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-archivo font-black mb-4 leading-[1.05] tracking-tight">
-                                <span className="text-white">{data.nameFirst}</span>{' '}
-                                <span
-                                    className="bg-gradient-to-br from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
-                                >
-                                    {data.nameLast}
+                            <motion.p variants={childVariants} className="text-gray-400 text-lg font-medium mb-2 tracking-wide">{data.greeting}</motion.p>
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-archivo font-black mb-3 sm:mb-4 leading-[1.05] tracking-tight flex flex-wrap gap-x-2 sm:gap-x-3">
+                                <span className="flex">
+                                    {(data.nameFirst || '').split('').map((char, i) => (
+                                        <motion.span key={i} variants={childVariants} className="text-white inline-block">
+                                            {char === ' ' ? '\u00A0' : char}
+                                        </motion.span>
+                                    ))}
+                                </span>
+                                <span className="flex">
+                                    {(data.nameLast || '').split('').map((char, i) => (
+                                        <motion.span key={`last-${i}`} variants={childVariants} className="bg-gradient-to-br from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent inline-block">
+                                            {char === ' ' ? '\u00A0' : char}
+                                        </motion.span>
+                                    ))}
                                 </span>
                             </h1>
                         </motion.div>
@@ -255,6 +285,8 @@ const Hero = () => {
                                         <img
                                             src={data._activeImageUrl || ProfileImage}
                                             alt="Shanjai S"
+                                            loading="eager"
+                                            fetchpriority="high"
                                             className="w-full h-full object-cover object-[50%_15%] scale-105 hover:scale-110 transition-transform duration-700"
                                         />
                                         {/* Overlay gradient at bottom */}

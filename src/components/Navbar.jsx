@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Menu, X, Github, Linkedin, Settings, Code2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -94,7 +95,7 @@ const Navbar = () => {
 
                 {/* Mobile toggle */}
                 <button
-                    className="md:hidden w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-300 hover:text-white focus:outline-none transition-all"
+                    className="md:hidden w-11 h-11 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center text-gray-300 hover:text-white focus:outline-none transition-all"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     {isOpen ? <X size={18} /> : <Menu size={18} />}
@@ -102,33 +103,41 @@ const Navbar = () => {
             </div>
 
             {/* Mobile drawer */}
-            {isOpen && (
-                <div className="md:hidden bg-gray-950/95 backdrop-blur-2xl border-b border-white/5 px-6 pb-6 pt-2 flex flex-col gap-1">
-                    {navLinks.map(link => (
-                        <button
-                            key={link.id}
-                            onClick={() => scrollTo(link.id)}
-                            className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium focus:outline-none transition-colors ${
-                                activeSection === link.id
-                                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                                    : 'text-gray-300 hover:text-white hover:bg-white/5'
-                            }`}
-                        >
-                            {link.name}
-                        </button>
-                    ))}
-                    <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-2">
-                        <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
-                            <Github size={16} />
-                        </a>
-                        <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
-                            <Linkedin size={16} />
-                        </a>
-                    </div>
-                </div>
-            )}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className="md:hidden bg-gray-950/95 backdrop-blur-2xl border-b border-white/5 py-4 px-6 flex flex-col gap-2 shadow-2xl absolute top-full left-0 w-full"
+                    >
+                        {navLinks.map(link => (
+                            <button
+                                key={link.id}
+                                onClick={() => scrollTo(link.id)}
+                                className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium focus:outline-none transition-colors ${
+                                    activeSection === link.id
+                                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                }`}
+                            >
+                                {link.name}
+                            </button>
+                        ))}
+                        <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-2">
+                            <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
+                                className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                                <Github size={18} />
+                            </a>
+                            <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
+                                className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors">
+                                <Linkedin size={18} />
+                            </a>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 };

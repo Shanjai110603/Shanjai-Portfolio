@@ -66,9 +66,9 @@ const Footer = () => {
                                 { icon: Mail, href: 'mailto:shanjaisenthilkumar03@gmail.com', label: 'Email', user: 'shanjaisenthilkumar03' },
                             ].map(({ icon: Icon, href, label, user }) => (
                                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                                    className="flex items-center gap-3 group">
-                                    <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all">
-                                        <Icon size={14} />
+                                    className="flex items-center gap-3 group py-1">
+                                    <div className="w-11 h-11 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all">
+                                        <Icon size={16} />
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-600 leading-none mb-0.5">{label}</p>
@@ -92,9 +92,9 @@ const Footer = () => {
                     {/* Back to top */}
                     <button
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-blue-500/20 hover:border-blue-500/30 hover:scale-110 transition-all"
+                        className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-blue-500/20 hover:border-blue-500/30 hover:scale-110 transition-all"
                     >
-                        <ArrowUp size={15} />
+                        <ArrowUp size={18} />
                     </button>
                 </div>
             </div>
