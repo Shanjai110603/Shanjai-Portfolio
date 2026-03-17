@@ -1,59 +1,118 @@
 
 import { motion } from 'framer-motion';
-import { Briefcase, Calendar } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 
-const Experience = () => {
-    return (
-        <section id="experience" className="py-20 bg-gray-900/30">
-            <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="mb-16 text-center"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience</h2>
-                    <div className="w-20 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full"></div>
-                </motion.div>
+const experiences = [
+    {
+        role: 'Internet of Things (IoT) Intern',
+        company: 'Industrial Training',
+        type: 'Internship',
+        date: 'Dec 2022',
+        location: 'Coimbatore',
+        color: 'blue',
+        points: [
+            'Worked on device connectivity, monitoring systems, and system diagnostics.',
+            'Gained hands-on experience in infrastructure troubleshooting and diagnostics.',
+            'Learned real-world system integration and effective problem resolution.',
+        ],
+    },
+];
 
-                <div className="max-w-3xl mx-auto relative">
-                    {/* Vertical Line */}
-                    <div className="absolute left-0 md:left-8 top-0 h-full w-0.5 bg-gray-800"></div>
+const colorMap = {
+    blue: {
+        dot: 'bg-blue-500 shadow-blue-500/50',
+        badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+        border: 'border-blue-500/20',
+        glow: 'from-blue-500/8',
+        icon: 'text-blue-400',
+    },
+};
 
-                    {/* IoT Internship */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
-                        className="relative pl-8 md:pl-16 pb-12"
-                    >
-                        {/* Dot */}
-                        <div className="absolute left-[-5px] md:left-[27px] top-0 w-3 h-3 bg-cyan-500 rounded-full border-2 border-gray-900 z-10"></div>
+const Experience = () => (
+    <section id="experience" className="py-28 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
-                        <div className="bg-gray-800/30 p-6 rounded-2xl border border-gray-700/50 backdrop-blur-sm hover:border-cyan-500/30 transition-colors">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-                                <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                    <Briefcase size={18} className="text-cyan-400" />
-                                    Internet of Things (IoT) Intern
-                                </h3>
-                                <span className="text-sm text-gray-400 flex items-center gap-1 bg-gray-800 px-3 py-1 rounded-full w-fit">
-                                    <Calendar size={14} /> Dec 2022
-                                </span>
-                            </div>
-                            <p className="text-gray-400 mb-4 font-medium">Internship</p>
-                            <ul className="list-disc list-inside text-gray-300 space-y-2 text-sm leading-relaxed marker:text-cyan-500">
-                                <li>Worked on device connectivity, monitoring systems, and system diagnostics.</li>
-                                <li>Gained hands-on experience in infrastructure troubleshooting.</li>
-                                <li>Learned real-world system integration and effective problem resolution.</li>
-                            </ul>
-                        </div>
-                    </motion.div>
+        <div className="container mx-auto px-6">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-20"
+            >
+                <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Career</p>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                    Work{' '}
+                    <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                        Experience
+                    </span>
+                </h2>
+                <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)' }} />
+            </motion.div>
+
+            <div className="max-w-3xl mx-auto">
+                {/* Timeline line */}
+                <div className="relative">
+                    <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/40 via-purple-500/20 to-transparent" />
+
+                    {experiences.map((exp, i) => {
+                        const c = colorMap[exp.color] || colorMap.blue;
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: i * 0.15 }}
+                                viewport={{ once: true }}
+                                className="relative pl-14 pb-10 last:pb-0"
+                            >
+                                {/* Timeline dot */}
+                                <div className={`absolute left-3.5 top-1.5 w-3 h-3 rounded-full ${c.dot} shadow-lg z-10 ring-4 ring-gray-950`} />
+
+                                {/* Card */}
+                                <div className={`bg-gradient-to-br ${c.glow} to-transparent border ${c.border} rounded-2xl p-6 backdrop-blur-sm hover:border-opacity-50 transition-all group`}>
+                                    {/* Header */}
+                                    <div className="flex flex-wrap gap-3 justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                                <Briefcase size={16} className={c.icon} />
+                                                {exp.role}
+                                            </h3>
+                                            <p className="text-gray-400 text-sm mt-1 font-medium">{exp.company}</p>
+                                        </div>
+                                        <div className="flex flex-col gap-1.5 items-end shrink-0">
+                                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${c.badge}`}>
+                                                <Calendar size={11} />{exp.date}
+                                            </span>
+                                            <span className="inline-flex items-center gap-1 text-gray-500 text-xs">
+                                                <MapPin size={11} />{exp.location}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Type tag */}
+                                    <span className="inline-block px-2.5 py-0.5 rounded text-xs font-medium bg-white/5 text-gray-400 border border-white/8 mb-4">
+                                        {exp.type}
+                                    </span>
+
+                                    {/* Points */}
+                                    <ul className="space-y-2.5">
+                                        {exp.points.map((pt, idx) => (
+                                            <li key={idx} className="flex gap-3 text-sm text-gray-300 leading-relaxed">
+                                                <ChevronRight size={14} className={`${c.icon} mt-0.5 shrink-0`} />
+                                                <span>{pt}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
-        </section>
-    );
-};
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+    </section>
+);
 
 export default Experience;

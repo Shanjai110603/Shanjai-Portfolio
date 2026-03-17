@@ -1,29 +1,25 @@
+
 import { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Settings, Code2 } from 'lucide-react';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-
     const [activeSection, setActiveSection] = useState('home');
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-
-            // Active section detection
+            setIsScrolled(window.scrollY > 30);
             const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
-            const currentSection = sections.find(section => {
-                const element = document.getElementById(section);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    return rect.top <= 100 && rect.bottom >= 100;
+            const current = sections.find(sec => {
+                const el = document.getElementById(sec);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    return rect.top <= 120 && rect.bottom >= 120;
                 }
                 return false;
             });
-            if (currentSection) {
-                setActiveSection(currentSection);
-            }
+            if (current) setActiveSection(current);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
@@ -38,105 +34,107 @@ const Navbar = () => {
         { name: 'Contact', id: 'contact' },
     ];
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            const offsetTop = element.offsetTop;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-            setIsOpen(false);
-        }
+    const scrollTo = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        setIsOpen(false);
     };
 
     return (
-        <nav
-            className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
-                ? 'bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-lg'
+        <nav className={`fixed w-full z-50 transition-all duration-500 ${
+            isScrolled
+                ? 'bg-gray-950/80 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/20'
                 : 'bg-transparent'
-                }`}
-        >
-            <div className="container mx-auto px-6 py-6 flex justify-between items-center">
+        }`}>
+            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+                {/* Logo */}
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity focus:outline-none"
+                    className="flex items-center gap-2 group focus:outline-none"
                 >
-                    Shanjai S
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}>
+                        <Code2 size={14} className="text-white" />
+                    </div>
+                    <span className="text-xl font-black"
+                        style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                        Shanjai S
+                    </span>
                 </button>
 
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center space-x-8">
-                    {navLinks.map((link) => (
+                {/* Desktop nav */}
+                <div className="hidden md:flex items-center gap-1">
+                    {navLinks.map(link => (
                         <button
-                            key={link.name}
-                            onClick={() => scrollToSection(link.id)}
-                            className={`text-base font-medium transition-all duration-300 px-5 py-2.5 rounded-full focus:outline-none ${activeSection === link.id
-                                ? 'bg-blue-600/20 text-blue-400'
-                                : 'text-gray-300 hover:text-cyan-400'
-                                }`}
+                            key={link.id}
+                            onClick={() => scrollTo(link.id)}
+                            className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none ${
+                                activeSection === link.id
+                                    ? 'text-white'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            }`}
                         >
                             {link.name}
+                            {activeSection === link.id && (
+                                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-400" />
+                            )}
                         </button>
                     ))}
-                    <a
-                        href="https://github.com/Shanjai110603"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-300 hover:text-white transition-colors"
-                    >
-                        <Github size={20} />
+                </div>
+
+                {/* Right icons */}
+                <div className="hidden md:flex items-center gap-2">
+                    <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
+                        <Github size={15} />
                     </a>
-                    <a
-                        href="https://www.linkedin.com/in/shanjaisenthilkumar/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-300 hover:text-blue-400 transition-colors"
-                    >
-                        <Linkedin size={20} />
+                    <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-white/10 hover:border-white/15 transition-all">
+                        <Linkedin size={15} />
+                    </a>
+                    <a href="/admin"
+                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 hover:text-cyan-400 hover:bg-white/10 hover:border-white/15 transition-all"
+                        title="Admin Panel">
+                        <Settings size={14} />
                     </a>
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* Mobile toggle */}
                 <button
-                    className="md:hidden text-gray-300 hover:text-white focus:outline-none"
+                    className="md:hidden w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-300 hover:text-white focus:outline-none transition-all"
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    {isOpen ? <X size={28} /> : <Menu size={28} />}
+                    {isOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
             </div>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile drawer */}
             {isOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-xl border-b border-gray-800 p-6 flex flex-col space-y-4 shadow-2xl animate-in slide-in-from-top-5">
-                    {navLinks.map((link) => (
+                <div className="md:hidden bg-gray-950/95 backdrop-blur-2xl border-b border-white/5 px-6 pb-6 pt-2 flex flex-col gap-1">
+                    {navLinks.map(link => (
                         <button
-                            key={link.name}
-                            onClick={() => scrollToSection(link.id)}
-                            className={`text-lg font-medium py-2 border-b border-gray-800/50 block w-full text-left focus:outline-none ${activeSection === link.id
-                                ? 'text-cyan-400'
-                                : 'text-gray-300 hover:text-cyan-400'
-                                }`}
+                            key={link.id}
+                            onClick={() => scrollTo(link.id)}
+                            className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium focus:outline-none transition-colors ${
+                                activeSection === link.id
+                                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                            }`}
                         >
                             {link.name}
                         </button>
                     ))}
-                    <div className="flex space-x-6 pt-4">
-                        <a
-                            href="https://github.com/Shanjai110603"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-400 hover:text-white"
-                        >
-                            <Github size={24} />
+                    <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-2">
+                        <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
+                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
+                            <Github size={16} />
                         </a>
-                        <a
-                            href="https://www.linkedin.com/in/shanjaisenthilkumar/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-400 hover:text-blue-400"
-                        >
-                            <Linkedin size={24} />
+                        <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
+                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
+                            <Linkedin size={16} />
+                        </a>
+                        <a href="/admin"
+                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
+                            <Settings size={15} />
                         </a>
                     </div>
                 </div>

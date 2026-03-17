@@ -1,111 +1,143 @@
 
 import { motion } from 'framer-motion';
-import { GraduationCap, Award, BookOpen } from 'lucide-react';
+import { GraduationCap, Award, BookOpen, ExternalLink } from 'lucide-react';
 
-const Education = () => {
-    const educationData = [
-        {
-            degree: "B.Sc Computer Science (Cognitive Systems)",
-            institution: "Karpagam Academy of Higher Education, Coimbatore",
-            year: "2024",
-            grade: "CGPA: 8.49",
-            icon: GraduationCap
-        },
-        {
-            degree: "HSC (State Board)",
-            institution: "Sree Adharsh Matriculation HSS",
-            year: "2021",
-            grade: "87.4%",
-            icon: BookOpen
-        },
-        {
-            degree: "SSLC (State Board)",
-            institution: "Sree Adharsh Matriculation HSS",
-            year: "2019",
-            grade: "77.2%",
-            icon: BookOpen
-        }
-    ];
+const educationData = [
+    {
+        degree: 'B.Sc Computer Science (Cognitive Systems)',
+        institution: 'Karpagam Academy of Higher Education, Coimbatore',
+        year: '2024',
+        grade: 'CGPA: 8.49',
+        highlight: true,
+    },
+    {
+        degree: 'HSC — State Board',
+        institution: 'Sree Adharsh Matriculation HSS',
+        year: '2021',
+        grade: '87.4%',
+        highlight: false,
+    },
+    {
+        degree: 'SSLC — State Board',
+        institution: 'Sree Adharsh Matriculation HSS',
+        year: '2019',
+        grade: '77.2%',
+        highlight: false,
+    },
+];
 
-    const certifications = [
-        "Python – Skillrack",
-        "C – Skillrack",
-        "Python – NPTEL"
-    ];
+const certifications = [
+    { name: 'Python Programming', provider: 'Skillrack', color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
+    { name: 'C Programming', provider: 'Skillrack', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+    { name: 'Python (Elite)', provider: 'NPTEL', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+];
 
-    return (
-        <section id="education" className="py-20 relative">
-            <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="mb-16 text-center"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Education & Certifications</h2>
-                    <div className="w-20 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full"></div>
-                </motion.div>
+const Education = () => (
+    <section id="education" className="py-28 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute bottom-20 left-0 w-72 h-72 -z-10 opacity-15"
+            style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.4), transparent)', filter: 'blur(60px)' }} />
 
-                <div className="grid grid-cols-1 gap-16 max-w-4xl mx-auto">
-                    {/* Education Column */}
-                    <div>
-                        <h3 className="text-2xl font-bold mb-8 flex items-center gap-2">
-                            <GraduationCap className="text-cyan-400" />
-                            Education History
-                        </h3>
-                        <div className="space-y-8">
-                            {educationData.map((edu, index) => (
+        <div className="container mx-auto px-6">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-20"
+            >
+                <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Academic Background</p>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                    Education &{' '}
+                    <span style={{ background: 'linear-gradient(135deg,#818cf8,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                        Certifications
+                    </span>
+                </h2>
+                <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#6366f1,#34d399)' }} />
+            </motion.div>
+
+            <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                {/* Education timeline */}
+                <div>
+                    <h3 className="flex items-center gap-2 text-white font-bold text-lg mb-8">
+                        <GraduationCap size={20} className="text-indigo-400" /> Education History
+                    </h3>
+                    <div className="relative">
+                        <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/40 to-transparent" />
+                        <div className="space-y-6">
+                            {educationData.map((edu, i) => (
                                 <motion.div
-                                    key={index}
+                                    key={i}
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                                    transition={{ duration: 0.5, delay: i * 0.1 }}
                                     viewport={{ once: true }}
-                                    className="relative pl-8 border-l-2 border-gray-800"
+                                    className="relative pl-14"
                                 >
-                                    <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-cyan-500 border-4 border-gray-950"></div>
-                                    <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-800 hover:border-cyan-500/30 transition-colors">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h4 className="text-lg font-bold text-white">{edu.degree}</h4>
-                                            <span className="text-sm text-cyan-400 font-medium whitespace-nowrap bg-cyan-500/10 px-2 py-1 rounded">{edu.year}</span>
+                                    {/* Dot */}
+                                    <div className={`absolute left-3.5 top-3 w-3 h-3 rounded-full z-10 ring-4 ring-gray-950 ${edu.highlight ? 'bg-indigo-500 shadow-lg shadow-indigo-500/50' : 'bg-gray-600'}`} />
+
+                                    <div className={`rounded-2xl p-5 border transition-all hover:border-indigo-500/30 ${edu.highlight ? 'bg-indigo-500/5 border-indigo-500/20' : 'bg-white/3 border-white/8'}`}>
+                                        <div className="flex items-start justify-between gap-3 mb-1">
+                                            <h4 className="text-white font-bold text-base leading-snug">{edu.degree}</h4>
+                                            <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-mono font-bold ${edu.highlight ? 'bg-indigo-500/20 text-indigo-300' : 'bg-white/8 text-gray-400'}`}>
+                                                {edu.year}
+                                            </span>
                                         </div>
                                         <p className="text-gray-400 text-sm mb-2">{edu.institution}</p>
-                                        <p className="text-gray-300 font-medium">{edu.grade}</p>
+                                        <p className="text-sm font-semibold text-gray-300">{edu.grade}</p>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Certifications Column */}
-                    <div>
-                        <h3 className="text-2xl font-bold mb-8 flex items-center gap-2">
-                            <Award className="text-cyan-400" />
-                            Certifications
-                        </h3>
-                        <div className="grid gap-4">
-                            {certifications.map((cert, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                    className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-800 hover:border-cyan-500/30 transition-colors group"
-                                >
-                                    <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
-                                        <Award className="text-cyan-400" size={24} />
-                                    </div>
-                                    <span className="text-lg font-medium text-gray-200">{cert}</span>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                 </div>
+
+                {/* Certifications */}
+                <div>
+                    <h3 className="flex items-center gap-2 text-white font-bold text-lg mb-8">
+                        <Award size={20} className="text-emerald-400" /> Certifications
+                    </h3>
+                    <div className="space-y-4">
+                        {certifications.map((cert, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: i * 0.1 }}
+                                viewport={{ once: true }}
+                                className="group flex items-center gap-4 p-5 rounded-2xl bg-white/3 border border-white/8 hover:border-white/15 hover:bg-white/5 transition-all"
+                            >
+                                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${cert.color}`}>
+                                    <Award size={20} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-white font-semibold text-sm">{cert.name}</p>
+                                    <p className="text-gray-500 text-xs mt-0.5">Provider: {cert.provider}</p>
+                                </div>
+                                <ExternalLink size={14} className="text-gray-600 group-hover:text-gray-400 transition-colors" />
+                            </motion.div>
+                        ))}
+
+                        {/* Mini quote card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.35 }}
+                            viewport={{ once: true }}
+                            className="mt-6 p-5 rounded-2xl border border-dashed border-white/10 bg-gradient-to-br from-indigo-500/5 to-emerald-500/5"
+                        >
+                            <BookOpen size={16} className="text-gray-500 mb-2" />
+                            <p className="text-gray-500 text-sm leading-relaxed italic">
+                                "Continuously learning and expanding my stack — always pursuing mastery."
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
             </div>
-        </section>
-    );
-};
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+    </section>
+);
 
 export default Education;
