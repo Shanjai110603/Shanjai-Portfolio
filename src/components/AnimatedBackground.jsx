@@ -35,19 +35,6 @@ const AnimatedBackground = () => {
             mouse.y = null;
         };
 
-        const handleResize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initParticles();
-        };
-
-        // Initialize canvas sizing
-        handleResize();
-
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseleave', handleMouseLeave);
-        window.addEventListener('resize', handleResize);
-
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -105,6 +92,19 @@ const AnimatedBackground = () => {
                 particles.push(new Particle());
             }
         }
+
+        const handleResize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        };
+
+        // Initialize canvas sizing
+        handleResize();
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('resize', handleResize);
 
         const drawConnections = () => {
             for (let a = 0; a < particles.length; a++) {

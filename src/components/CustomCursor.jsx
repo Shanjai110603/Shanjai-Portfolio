@@ -49,6 +49,7 @@ const CustomCursor = () => {
         };
     }, [cursorX, cursorY]);
 
+    // Do not render anything for touch devices (must wrap the return, no early return before hooks)
     if (isTouchDevice) return null;
 
     return (

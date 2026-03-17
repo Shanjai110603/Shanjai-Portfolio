@@ -17,6 +17,7 @@ import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';
 import AnimatedBackground from './components/AnimatedBackground';
 import CustomCursor from './components/CustomCursor';
+import ErrorBoundary from './components/ErrorBoundary';
 import { SITEINFO_KEY, defaultSiteInfo } from './admin/tabs/SiteInfoTab';
 
 const AdminApp = lazy(() => import('./admin/AdminApp'));
@@ -78,14 +79,16 @@ const Portfolio = () => {
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/" element={<Portfolio />} />
-          <Route path="/projects" element={<AllProjects />} />
-          <Route path="/admin" element={<AdminApp />} />
-          <Route path="/admin/*" element={<AdminApp />} />
-        </Routes>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingScreen />}>
+          <Routes>
+            <Route path="/" element={<Portfolio />} />
+            <Route path="/projects" element={<AllProjects />} />
+            <Route path="/admin" element={<AdminApp />} />
+            <Route path="/admin/*" element={<AdminApp />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
