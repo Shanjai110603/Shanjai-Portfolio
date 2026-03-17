@@ -10,7 +10,7 @@ const Navbar = () => {
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 30);
-            const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+            const sections = ['home', 'about', 'skills', 'projects', 'experience', 'education', 'contact'];
             const current = sections.find(sec => {
                 const el = document.getElementById(sec);
                 if (el) {
