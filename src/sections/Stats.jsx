@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Coffee, Layers, Clock } from 'lucide-react';
 
-export const STATS_KEY = 'portfolio_stats';
+import { STORAGE_KEYS } from '../lib/constants';
+export const STATS_KEY = STORAGE_KEYS.stats;
 
 export const defaultStats = [
     { id: 1, icon: 'Layers', label: 'Projects Built', value: 10, suffix: '+', color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/15' },

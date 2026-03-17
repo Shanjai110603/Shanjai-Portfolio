@@ -52,7 +52,8 @@ const defaultProjects = [
     },
 ];
 
-export const PROJECTS_KEY = 'portfolio_projects';
+import { STORAGE_KEYS } from '../lib/constants';
+export const PROJECTS_KEY = STORAGE_KEYS.projects;
 
 const getProjects = () => {
     try {

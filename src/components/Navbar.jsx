@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Github, Linkedin, Settings, Code2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SITE } from '../lib/constants';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -83,11 +84,11 @@ const Navbar = () => {
 
                 {/* Right icons */}
                 <div className="hidden md:flex items-center gap-2">
-                    <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
+                    <a href={SITE.github} target="_blank" rel="noopener noreferrer"
                         className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
                         <Github size={15} />
                     </a>
-                    <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
+                    <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"
                         className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-white/10 hover:border-white/15 transition-all">
                         <Linkedin size={15} />
                     </a>
@@ -126,11 +127,11 @@ const Navbar = () => {
                             </button>
                         ))}
                         <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-2">
-                            <a href="https://github.com/Shanjai110603" target="_blank" rel="noopener noreferrer"
+                            <a href={SITE.github} target="_blank" rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
                                 <Github size={18} />
                             </a>
-                            <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
+                            <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors">
                                 <Linkedin size={18} />
                             </a>

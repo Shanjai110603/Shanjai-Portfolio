@@ -1,5 +1,6 @@
 
 import { Github, Linkedin, Mail, ArrowUp, MapPin, Code2 } from 'lucide-react';
+import { SITE } from '../lib/constants';
 
 const Footer = () => {
     const navLinks = [
@@ -61,9 +62,9 @@ const Footer = () => {
                         <p className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Connect</p>
                         <div className="space-y-3">
                             {[
-                                { icon: Github, href: 'https://github.com/Shanjai110603', label: 'GitHub', user: 'Shanjai110603' },
-                                { icon: Linkedin, href: 'https://www.linkedin.com/in/shanjaisenthilkumar/', label: 'LinkedIn', user: 'shanjaisenthilkumar' },
-                                { icon: Mail, href: 'mailto:shanjaisenthilkumar03@gmail.com', label: 'Email', user: 'shanjaisenthilkumar03' },
+                                { icon: Github, href: SITE.github, label: 'GitHub', user: SITE.githubUsername },
+                                { icon: Linkedin, href: SITE.linkedin, label: 'LinkedIn', user: 'shanjaisenthilkumar' },
+                                { icon: Mail, href: `mailto:${SITE.email}`, label: 'Email', user: 'shanjaisenthilkumar03' },
                             ].map(({ icon: Icon, href, label, user }) => (
                                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                                     className="flex items-center gap-3 group py-1">

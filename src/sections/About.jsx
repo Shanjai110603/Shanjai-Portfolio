@@ -1,16 +1,17 @@
 
 import { motion } from 'framer-motion';
 import { Code2, Cpu, Globe, Rocket, MapPin, Mail, ExternalLink, Zap, Star, Shield, Database, Layout } from 'lucide-react';
+import { STORAGE_KEYS, SITE } from '../lib/constants';
 
 export const ICON_MAP = { Code2, Cpu, Globe, Rocket, MapPin, Mail, ExternalLink, Zap, Star, Shield, Database, Layout };
 
 const defaultAboutData = {
     location: 'Coimbatore, India',
-    email: 'shanjaisenthilkumar03@gmail.com',
+    email: SITE.email,
     bioP1: "I'm a Computer Science Graduate (2024) who loves turning complex logic into clean, scalable software. My journey started with C++ and Python — and grew into full-stack development.",
     bioP2: "Today I build end-to-end applications that balance performance with great UX. I thrive on real-world challenges and ship projects that make a difference.",
     techTags: ['C++', 'Python', 'React', 'JavaScript', 'MySQL', 'Git', 'Problem Solving'],
-    githubUrl: 'https://github.com/Shanjai110603',
+    githubUrl: SITE.github,
     highlights: [
         { icon: 'Code2', title: 'Full-Stack Dev', desc: 'End-to-end solutions', color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/20' },
         { icon: 'Cpu', title: 'Problem Solver', desc: 'DSA & Optimization', color: 'text-purple-400', bg: 'from-purple-500/10 to-purple-600/5', border: 'border-purple-500/20' },
@@ -19,7 +20,7 @@ const defaultAboutData = {
     ]
 };
 
-export const ABOUT_KEY = 'portfolio_about';
+export const ABOUT_KEY = STORAGE_KEYS.about;
 
 const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
 

@@ -37,7 +37,8 @@ export const defaultEducation = {
     quote: "Continuously learning and expanding my stack — always pursuing mastery."
 };
 
-export const EDU_KEY = 'portfolio_education';
+import { STORAGE_KEYS } from '../lib/constants';
+export const EDU_KEY = STORAGE_KEYS.education;
 
 const getEducationData = () => {
     try {

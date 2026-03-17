@@ -2,8 +2,11 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Send, CheckCircle2, MapPin, Mail, AlertCircle } from 'lucide-react';
+import { SITE, STORAGE_KEYS } from '../lib/constants';
 
-export const MESSAGES_KEY = 'portfolio_messages';
+export const MESSAGES_KEY = STORAGE_KEYS.messages;
+
+const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
 const Contact = () => {
     const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -15,14 +18,25 @@ const Contact = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!form.name || !form.email || !form.message) { setError('Please fill in all required fields.'); return; }
+        if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+            setError('Please fill in all required fields.');
+            return;
+        }
+        if (!EMAIL_RE.test(form.email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
         setError('');
         setLoading(true);
 
         setTimeout(() => {
-            const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
-            messages.unshift({ ...form, id: Date.now(), date: new Date().toISOString(), read: false });
-            localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+            try {
+                const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
+                messages.unshift({ ...form, id: Date.now(), date: new Date().toISOString(), read: false });
+                localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+            } catch (err) {
+                console.warn('Could not save message to localStorage:', err);
+            }
             setForm({ name: '', email: '', subject: '', message: '' });
             setLoading(false);
             setSent(true);
@@ -75,8 +89,8 @@ const Contact = () => {
                         </div>
 
                         {[
-                            { icon: Mail, label: 'Email', value: 'shanjaisenthilkumar03@gmail.com', href: 'mailto:shanjaisenthilkumar03@gmail.com' },
-                            { icon: MapPin, label: 'Location', value: 'Coimbatore, Tamil Nadu, India', href: null },
+                            { icon: Mail, label: 'Email', value: SITE.email, href: `mailto:${SITE.email}` },
+                            { icon: MapPin, label: 'Location', value: SITE.location, href: null },
                         ].map(({ icon: Icon, label, value, href }) => (
                             <div key={label} className="flex items-start gap-4 p-4 rounded-xl bg-white/3 border border-white/8 hover:border-white/15 transition-all group">
                                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">

@@ -21,8 +21,10 @@ const defaultHeroData = {
     badgeBottomLeft: "⚡ Full-Stack Dev"
 };
 
-export const HERO_KEY = 'portfolio_hero';
-const MEDIA_KEY = 'portfolio_media';
+import { STORAGE_KEYS } from '../lib/constants';
+
+export const HERO_KEY = STORAGE_KEYS.hero; // Re-export for backward-compat with admin tabs
+const MEDIA_KEY = STORAGE_KEYS.media;
 
 // Strip any HTML tags from old stored data
 const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();

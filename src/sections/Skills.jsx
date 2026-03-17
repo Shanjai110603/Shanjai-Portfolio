@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-export const SKILLS_KEY = 'portfolio_skills';
+import { STORAGE_KEYS } from '../lib/constants';
+export const SKILLS_KEY = STORAGE_KEYS.skills;
 
 export const defaultSkillsData = [
     {

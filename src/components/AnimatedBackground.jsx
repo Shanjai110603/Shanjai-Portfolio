@@ -141,10 +141,21 @@ const AnimatedBackground = () => {
 
         animate();
 
+        // Pause animation when tab is hidden — saves CPU
+        const handleVisibility = () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrameId);
+            } else {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('resize', handleResize);
+            document.removeEventListener('visibilitychange', handleVisibility);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

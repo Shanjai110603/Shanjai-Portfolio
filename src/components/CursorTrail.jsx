@@ -1,7 +1,78 @@
-import { useEffect, useRef } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { useEffect, useCallback } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const TRAIL_COUNT = 6;
+
+/**
+ * Optimized CursorTrail:
+ * - ONE shared mousemove event listener (not 6!)
+ * - Each dot gets its own motion values, updated from the single listener
+ * - No setTimeout, no useRef, no hook violations
+ * - Renders nothing on touch devices
+ */
+
+// Single shared position source that all dots read from
+let globalMouseX = -100;
+let globalMouseY = -100;
+const subscribers = new Set();
+
+const startGlobalListener = () => {
+    const onMove = (e) => {
+        globalMouseX = e.clientX;
+        globalMouseY = e.clientY;
+        subscribers.forEach(fn => fn(e.clientX, e.clientY));
+    };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
+};
+
+let cleanup = null;
+
+const TrailDot = ({ index }) => {
+    const size = Math.max(3, 10 - index * 1.1);
+    const opacity = Math.max(0.08, 1 - index * 0.16);
+    const stiffness = Math.max(15, 200 - index * 28);
+    const damping = 22 + index * 5;
+
+    const rawX = useMotionValue(globalMouseX - size / 2);
+    const rawY = useMotionValue(globalMouseY - size / 2);
+    const x = useSpring(rawX, { stiffness, damping, mass: 0.4 });
+    const y = useSpring(rawY, { stiffness, damping, mass: 0.4 });
+
+    const update = useCallback((mx, my) => {
+        rawX.set(mx - size / 2);
+        rawY.set(my - size / 2);
+    }, [rawX, rawY, size]);
+
+    useEffect(() => {
+        subscribers.add(update);
+        if (subscribers.size === 1) {
+            cleanup = startGlobalListener();
+        }
+        return () => {
+            subscribers.delete(update);
+            if (subscribers.size === 0 && cleanup) {
+                cleanup();
+                cleanup = null;
+            }
+        };
+    }, [update]);
+
+    return (
+        <motion.div
+            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9990] hidden md:block"
+            style={{
+                x, y,
+                width: size,
+                height: size,
+                opacity,
+                background: 'white',
+                mixBlendMode: 'difference',
+                willChange: 'transform',
+            }}
+        />
+    );
+};
 
 const CursorTrail = () => {
     const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
@@ -10,46 +81,9 @@ const CursorTrail = () => {
     return (
         <>
             {Array.from({ length: TRAIL_COUNT }).map((_, i) => (
-                <TrailDot key={i} delay={i * 0.04} size={Math.max(4, 10 - i * 1.2)} opacity={1 - i * 0.15} />
+                <TrailDot key={i} index={i} />
             ))}
         </>
-    );
-};
-
-const TrailDot = ({ delay, size, opacity }) => {
-    const dotRef = useRef(null);
-    const x = useSpring(-100, { stiffness: 120 - delay * 300, damping: 20 + delay * 40, mass: 0.5 });
-    const y = useSpring(-100, { stiffness: 120 - delay * 300, damping: 20 + delay * 40, mass: 0.5 });
-
-    useEffect(() => {
-        let timeout;
-        const handleMouseMove = (e) => {
-            timeout = setTimeout(() => {
-                x.set(e.clientX - size / 2);
-                y.set(e.clientY - size / 2);
-            }, delay * 1000);
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            clearTimeout(timeout);
-        };
-    }, [x, y, delay, size]);
-
-    return (
-        <motion.div
-            ref={dotRef}
-            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9990] hidden md:block"
-            style={{
-                x,
-                y,
-                width: size,
-                height: size,
-                opacity,
-                background: 'white',
-                mixBlendMode: 'difference',
-            }}
-        />
     );
 };
 

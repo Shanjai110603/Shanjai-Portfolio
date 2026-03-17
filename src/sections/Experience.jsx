@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
+import { STORAGE_KEYS } from '../lib/constants';
 
 export const defaultExperiences = [
     {
@@ -19,7 +20,7 @@ export const defaultExperiences = [
     },
 ];
 
-export const EXP_KEY = 'portfolio_experience';
+export const EXP_KEY = STORAGE_KEYS.experience;
 
 const getExperienceData = () => {
     try {
