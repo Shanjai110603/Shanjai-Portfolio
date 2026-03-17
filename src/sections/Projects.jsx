@@ -1,5 +1,6 @@
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import { Link } from 'react-router-dom';
@@ -62,9 +63,21 @@ const getProjects = () => {
 
 export { defaultProjects };
 
+const FILTER_TABS = ['All', 'Security', 'Python', 'Web', 'Automation'];
+
 const Projects = () => {
     const allProjects = getProjects();
-    const projects = allProjects.filter(p => p.featured).slice(0, 4);
+    const [activeFilter, setActiveFilter] = useState('All');
+
+    const filtered = (activeFilter === 'All'
+        ? allProjects.filter(p => p.featured)
+        : allProjects.filter(p =>
+            p.featured && (
+                p.tech?.some(t => t.toLowerCase().includes(activeFilter.toLowerCase())) ||
+                (p.highlight && p.highlight.toLowerCase().includes(activeFilter.toLowerCase()))
+            )
+        )
+    ).slice(0, 4);
 
     return (
         <section id="projects" className="py-28 relative">
@@ -79,7 +92,7 @@ const Projects = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center mb-20"
+                    className="text-center mb-12"
                 >
                     <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-3">What I've Built</p>
                     <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
@@ -88,11 +101,43 @@ const Projects = () => {
                             Projects
                         </span>
                     </h2>
-                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-400" />
+                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-400 mb-8" />
+
+                    {/* Filter Tabs */}
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {FILTER_TABS.map(tab => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveFilter(tab)}
+                                className={`relative px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                                    activeFilter === tab ? 'text-white' : 'text-gray-400 hover:text-white border border-white/10 bg-white/5 hover:bg-white/10'
+                                }`}
+                            >
+                                {activeFilter === tab && (
+                                    <motion.span
+                                        layoutId="activeFilterPill"
+                                        className="absolute inset-0 rounded-full"
+                                        style={{ background: 'linear-gradient(135deg, rgb(var(--theme-primary-500)), rgb(var(--theme-secondary-500)))' }}
+                                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                                    />
+                                )}
+                                <span className="relative z-10">{tab}</span>
+                            </button>
+                        ))}
+                    </div>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-7 max-w-5xl mx-auto">
-                    {projects.map((project, index) => (
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeFilter}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="grid md:grid-cols-2 gap-7 max-w-5xl mx-auto"
+                    >
+                    {filtered.map((project, index) => (
+
                         <Tilt key={project.id ?? index} tiltMaxAngleX={4} tiltMaxAngleY={4} scale={1} transitionSpeed={2000}>
                             <motion.div
                                 initial={{ opacity: 0, y: 40, rotateX: -15, scale: 0.95 }}
@@ -159,7 +204,8 @@ const Projects = () => {
                             </motion.div>
                         </Tilt>
                     ))}
-                </div>
+                    </motion.div>
+                </AnimatePresence>
 
                 {/* View more link */}
                 <motion.div

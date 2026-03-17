@@ -17,7 +17,11 @@ import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';
 import AnimatedBackground from './components/AnimatedBackground';
 import CustomCursor from './components/CustomCursor';
+import CursorTrail from './components/CursorTrail';
+import ScrollProgressBar from './components/ScrollProgressBar';
+import HireMeCTA from './components/HireMeCTA';
 import ErrorBoundary from './components/ErrorBoundary';
+import GitHubStats from './sections/GitHubStats';
 import { SITEINFO_KEY, defaultSiteInfo } from './admin/tabs/SiteInfoTab';
 
 const AdminApp = lazy(() => import('./admin/AdminApp'));
@@ -56,7 +60,9 @@ const Portfolio = () => {
 
   return (
     <div className={themeClass}>
+      <ScrollProgressBar />
       <CustomCursor />
+      <CursorTrail />
       {globalSettings.enableAnimatedBackground && <AnimatedBackground />}
       <Navbar />
       <main className="relative z-10">
@@ -65,12 +71,14 @@ const Portfolio = () => {
         {globalSettings.showAbout && <About />}
         {globalSettings.showSkills && <Skills />}
         {globalSettings.showProjects && <Projects />}
+        <GitHubStats />
         {globalSettings.showExperience && <Experience />}
         {globalSettings.showEducation && <Education />}
         {globalSettings.showContact && <Contact />}
       </main>
       <Footer className="relative z-10" />
       <FloatingContact />
+      <HireMeCTA />
       <ScrollToTop />
     </div>
   );
