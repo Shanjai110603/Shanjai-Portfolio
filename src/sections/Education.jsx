@@ -65,7 +65,7 @@ const Education = () => {
                 className="text-center mb-20"
             >
                 <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Academic Background</p>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                     Education &{' '}
                     <span style={{ background: 'linear-gradient(135deg,#818cf8,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                         Certifications
@@ -124,7 +124,7 @@ const Education = () => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                                 viewport={{ once: true }}
-                                className="group flex items-center gap-4 p-5 rounded-2xl bg-white/3 border border-white/8 hover:border-white/15 hover:bg-white/5 transition-all"
+                                className="group flex cursor-pointer items-center gap-4 p-5 rounded-2xl bg-white/3 border border-white/8 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-colors duration-200"
                             >
                                 <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${cert.color}`}>
                                     <Award size={20} />
@@ -133,7 +133,7 @@ const Education = () => {
                                     <p className="text-white font-semibold text-sm">{cert.name}</p>
                                     <p className="text-gray-500 text-xs mt-0.5">Provider: {cert.provider}</p>
                                 </div>
-                                <ExternalLink size={14} className="text-gray-600 group-hover:text-gray-400 transition-colors" />
+                                <ExternalLink size={14} className="text-gray-600 group-hover:text-emerald-400 transition-colors duration-200" />
                             </motion.div>
                         ))}
 

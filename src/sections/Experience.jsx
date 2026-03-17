@@ -75,7 +75,7 @@ const Experience = () => {
                 className="text-center mb-20"
             >
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Career</p>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                     Work{' '}
                     <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                         Experience

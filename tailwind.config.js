@@ -17,6 +17,10 @@ export default {
           600: 'rgb(var(--theme-secondary-600) / <alpha-value>)',
         }
       },
+      fontFamily: {
+        sans: ['Space Grotesk', 'sans-serif'],
+        archivo: ['Archivo', 'sans-serif'],
+      },
     },
   },
   plugins: [],

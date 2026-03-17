@@ -46,7 +46,7 @@ const Contact = () => {
                     className="text-center mb-20"
                 >
                     <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">Let's Talk</p>
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                    <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                         Get In{' '}
                         <span style={{ background: 'linear-gradient(135deg,#a78bfa,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                             Touch
@@ -171,7 +171,7 @@ const Contact = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    className="w-full cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] disabled:opacity-60 disabled:cursor-not-allowed"
                                     style={{ background: 'linear-gradient(135deg,#8b5cf6,#06b6d4)' }}
                                 >
                                     {loading ? (

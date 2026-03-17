@@ -82,7 +82,7 @@ const Projects = () => {
                     className="text-center mb-20"
                 >
                     <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-3">What I've Built</p>
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                    <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                         Featured{' '}
                         <span style={{ background: 'linear-gradient(135deg,#60a5fa,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                             Projects
@@ -93,13 +93,13 @@ const Projects = () => {
 
                 <div className="grid md:grid-cols-2 gap-7 max-w-5xl mx-auto">
                     {projects.map((project, index) => (
-                        <Tilt key={project.id ?? index} tiltMaxAngleX={4} tiltMaxAngleY={4} scale={1.01} transitionSpeed={2000}>
+                        <Tilt key={project.id ?? index} tiltMaxAngleX={4} tiltMaxAngleY={4} scale={1} transitionSpeed={2000}>
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className="group relative bg-gray-900/50 rounded-2xl border border-white/8 overflow-hidden hover:border-white/15 hover:shadow-2xl transition-all duration-400 h-full"
+                                className="group relative bg-gray-950 rounded-2xl border border-white/8 overflow-hidden cursor-pointer hover:border-white/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-colors duration-200 h-full"
                                 style={{ backdropFilter: 'blur(12px)' }}
                             >
                                 {/* Banner */}
@@ -129,7 +129,7 @@ const Projects = () => {
                                 {/* Content */}
                                 <div className="p-6">
                                     <div className="flex justify-between items-start mb-3">
-                                        <h3 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors leading-snug">
+                                        <h3 className="text-xl font-archivo font-bold text-white group-hover:text-blue-300 transition-colors leading-snug">
                                             {project.title}
                                         </h3>
                                         <div className="flex gap-2 shrink-0 ml-2">

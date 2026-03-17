@@ -56,7 +56,7 @@ const About = () => {
                 className="text-center mb-20"
             >
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Who I Am</p>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">About <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Me</span></h2>
+                <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">About <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Me</span></h2>
                 <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)' }} />
             </motion.div>
 
@@ -98,7 +98,7 @@ const About = () => {
                     <div className="pt-2 flex gap-3 flex-wrap">
                         <button
                             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
                             style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}
                         >
                             Let's Connect
@@ -107,7 +107,7 @@ const About = () => {
                             href={data.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-gray-300 border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white hover:scale-105 transition-all"
+                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-gray-300 border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white hover:border-gray-400 transition-colors duration-200"
                         >
                             <ExternalLink size={14} /> GitHub Profile
                         </a>
@@ -129,10 +129,9 @@ const About = () => {
                                 key={title}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
-                                whileHover={{ y: -6, scale: 1.02 }}
                                 transition={{ duration: 0.4, delay: i * 0.08 }}
                                 viewport={{ once: true }}
-                                className={`p-5 rounded-2xl bg-gradient-to-br ${bg} border ${border} backdrop-blur-sm cursor-default`}
+                                className={`p-5 rounded-2xl bg-gradient-to-br border backdrop-blur-sm cursor-pointer hover:border-blue-400/30 transition-colors duration-200 ${bg} ${border}`}
                             >
                                 <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 ${color}`}>
                                     <Icon size={20} />

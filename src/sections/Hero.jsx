@@ -113,7 +113,7 @@ const Hero = () => {
                             transition={{ delay: 0.3, duration: 0.7 }}
                         >
                             <p className="text-gray-400 text-lg font-medium mb-2 tracking-wide">{data.greeting}</p>
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 leading-[1.05] tracking-tight">
+                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-archivo font-black mb-4 leading-[1.05] tracking-tight">
                                 <span className="text-white">{data.nameFirst}</span>{' '}
                                 <span
                                     style={{
@@ -165,18 +165,18 @@ const Hero = () => {
                         >
                             <button
                                 onClick={() => scrollTo('projects')}
-                                className="group relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30"
+                                className="group relative cursor-pointer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
                                 style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
                             >
-                                <Sparkles size={16} className="group-hover:rotate-12 transition-transform" />
+                                <Sparkles size={16} className="group-hover:rotate-12 transition-transform duration-200" />
                                 View My Work
-                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
                             </button>
 
                             <a
                                 href={data.cvUrl}
                                 download
-                                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-gray-300 border border-gray-700/60 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-gray-500 hover:text-white transition-all duration-300 hover:scale-105"
+                                className="inline-flex cursor-pointer items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-gray-300 border border-gray-700/60 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-gray-400 hover:text-white transition-colors duration-200"
                             >
                                 Download CV
                                 <Download size={16} />
