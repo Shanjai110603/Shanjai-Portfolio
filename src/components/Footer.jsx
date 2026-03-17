@@ -19,8 +19,8 @@ const Footer = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-gray-950/80 -z-10" />
 
             {/* Subtle top glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent)' }} />
+            <div className="absolute top-0 left-0 right-0 h-px"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(var(--theme-secondary-500), 0.4), transparent)' }} />
 
             <div className="container mx-auto px-6 pt-16 pb-8">
                 <div className="grid md:grid-cols-3 gap-12 mb-12">
@@ -28,8 +28,7 @@ const Footer = () => {
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <Code2 size={20} className="text-blue-400" />
-                            <span className="text-xl font-black"
-                                style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                            <span className="text-lg font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                                 Shanjai S
                             </span>
                         </div>

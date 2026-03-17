@@ -145,11 +145,11 @@ const Skills = () => {
                     <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">What I Know</p>
                     <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                         Technical{' '}
-                        <span style={{ background: 'linear-gradient(135deg,#a78bfa,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                        <span className="bg-gradient-to-br from-blue-400 to-cyan-500 bg-clip-text text-transparent">
                             Skills
                         </span>
                     </h2>
-                    <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#8b5cf6,#06b6d4)' }} />
+                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">

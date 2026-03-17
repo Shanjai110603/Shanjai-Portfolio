@@ -56,8 +56,8 @@ const About = () => {
                 className="text-center mb-20"
             >
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Who I Am</p>
-                <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">About <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Me</span></h2>
-                <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)' }} />
+                <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">About <span className="bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">Me</span></h2>
+                <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
             </motion.div>
 
             <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
@@ -98,8 +98,7 @@ const About = () => {
                     <div className="pt-2 flex gap-3 flex-wrap">
                         <button
                             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
-                            style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}
+                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] bg-gradient-to-br from-blue-500 to-cyan-500"
                         >
                             Let's Connect
                         </button>

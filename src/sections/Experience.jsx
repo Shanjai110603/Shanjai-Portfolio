@@ -77,11 +77,11 @@ const Experience = () => {
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Career</p>
                 <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                     Work{' '}
-                    <span style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    <span className="bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                         Experience
                     </span>
                 </h2>
-                <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)' }} />
+                <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
             </motion.div>
 
             <div className="max-w-3xl mx-auto">

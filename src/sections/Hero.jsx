@@ -134,12 +134,7 @@ const Hero = () => {
                             <h1 className="text-5xl md:text-6xl lg:text-7xl font-archivo font-black mb-4 leading-[1.05] tracking-tight">
                                 <span className="text-white">{data.nameFirst}</span>{' '}
                                 <span
-                                    style={{
-                                        background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        backgroundClip: 'text',
-                                    }}
+                                    className="bg-gradient-to-br from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
                                 >
                                     {data.nameLast}
                                 </span>
@@ -183,8 +178,7 @@ const Hero = () => {
                         >
                             <button
                                 onClick={() => scrollTo('projects')}
-                                className="group relative cursor-pointer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
-                                style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
+                                className="group relative cursor-pointer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-colors duration-200 hover:shadow-[0_0_20px_rgba(var(--theme-secondary-500),0.4)] bg-gradient-to-br from-blue-500 to-cyan-600"
                             >
                                 <Sparkles size={16} className="group-hover:rotate-12 transition-transform duration-200" />
                                 View My Work
@@ -241,7 +235,7 @@ const Hero = () => {
                             {/* Glow behind image */}
                             <div
                                 className="absolute inset-0 rounded-3xl opacity-40 blur-3xl scale-75"
-                                style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4))' }}
+                                style={{ background: 'linear-gradient(135deg, rgb(var(--theme-secondary-500)), rgb(var(--theme-primary-500)))' }}
                             />
 
                             <Tilt
@@ -255,7 +249,7 @@ const Hero = () => {
                                 {/* Outer ring */}
                                 <div
                                     className="p-[3px] rounded-3xl"
-                                    style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)', backgroundSize: '300% 300%', animation: 'gradient-shift 4s ease infinite' }}
+                                    style={{ backgroundImage: 'linear-gradient(135deg, rgb(var(--theme-secondary-500)), rgb(var(--theme-primary-600)), rgb(var(--theme-primary-500)), rgb(var(--theme-secondary-500)))', backgroundSize: '300% 300%', animation: 'gradient-shift 4s ease infinite' }}
                                 >
                                     <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-[22px] overflow-hidden bg-gray-950">
                                         <img

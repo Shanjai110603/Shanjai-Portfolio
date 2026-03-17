@@ -84,11 +84,11 @@ const Projects = () => {
                     <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-3">What I've Built</p>
                     <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                         Featured{' '}
-                        <span style={{ background: 'linear-gradient(135deg,#60a5fa,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                        <span className="bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                             Projects
                         </span>
                     </h2>
-                    <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#3b82f6,#34d399)' }} />
+                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-400" />
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-7 max-w-5xl mx-auto">

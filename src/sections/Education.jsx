@@ -67,11 +67,11 @@ const Education = () => {
                 <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Academic Background</p>
                 <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                     Education &{' '}
-                    <span style={{ background: 'linear-gradient(135deg,#818cf8,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                        Certifications
+                    <span className="bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                        Background
                     </span>
                 </h2>
-                <div className="w-16 h-1 rounded-full mx-auto" style={{ background: 'linear-gradient(90deg,#6366f1,#34d399)' }} />
+                <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
             </motion.div>
 
             <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">

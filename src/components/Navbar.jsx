@@ -52,12 +52,10 @@ const Navbar = () => {
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className="flex items-center gap-2 group focus:outline-none"
                 >
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-500">
                         <Code2 size={14} className="text-white" />
                     </div>
-                    <span className="text-xl font-black"
-                        style={{ background: 'linear-gradient(135deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    <span className="text-xl font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                         Shanjai S
                     </span>
                 </button>
