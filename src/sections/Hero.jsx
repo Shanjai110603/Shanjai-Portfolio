@@ -5,7 +5,46 @@ import { TypeAnimation } from 'react-type-animation';
 import Tilt from 'react-parallax-tilt';
 import ProfileImage from '../assets/profile.png';
 
+const defaultHeroData = {
+    statusBadge: "Open to Work · Freelance Ready",
+    greeting: "Hey there, I'm",
+    nameFirst: "Shanjai",
+    nameLast: "Senthilkumar",
+    roles: ["Full-Stack Developer", "React & Python Engineer", "Problem Solver", "Clean Code Advocate"],
+    bioText: "CS Graduate (2024) building scalable, beautiful web apps with React, Python & C++. Passionate about turning complex problems into elegant solutions.",
+    showImage: true,
+    cvUrl: "/Shanjai_S_Resume.pdf",
+    githubUrl: "https://github.com/Shanjai110603",
+    linkedinUrl: "https://www.linkedin.com/in/shanjaisenthilkumar/",
+    emailAddr: "shanjaisenthilkumar03@gmail.com",
+    badgeTopRight: "🚀 CS Graduate 2024",
+    badgeBottomLeft: "⚡ Full-Stack Dev"
+};
+
+export const HERO_KEY = 'portfolio_hero';
+
+// Strip any HTML tags from old stored data
+const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
+
+const getHeroData = () => {
+    try {
+        const stored = localStorage.getItem(HERO_KEY);
+        if (!stored) return defaultHeroData;
+        const parsed = JSON.parse(stored);
+        // Migrate old `bioHtml` to `bioText` by stripping tags
+        if (parsed.bioHtml && !parsed.bioText) {
+            parsed.bioText = stripHtml(parsed.bioHtml);
+            delete parsed.bioHtml;
+        }
+        return { ...defaultHeroData, ...parsed };
+    } catch { return defaultHeroData; }
+};
+
+export { defaultHeroData };
+
 const Hero = () => {
+    const data = getHeroData();
+
     const scrollTo = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -51,7 +90,7 @@ const Hero = () => {
                         initial={{ opacity: 0, x: -40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="lg:w-1/2 text-center lg:text-left"
+                        className={`${data.heroImageVisible !== false ? 'lg:w-1/2' : 'lg:w-full lg:max-w-3xl lg:mx-auto'} text-center lg:text-left`}
                     >
                         {/* Status badge */}
                         <motion.div
@@ -64,7 +103,7 @@ const Hero = () => {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                             </span>
-                            <span className="text-emerald-400 text-sm font-medium">Open to Work · Freelance Ready</span>
+                            <span className="text-emerald-400 text-sm font-medium">{data.statusBadge}</span>
                         </motion.div>
 
                         {/* Name */}
@@ -73,9 +112,9 @@ const Hero = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3, duration: 0.7 }}
                         >
-                            <p className="text-gray-400 text-lg font-medium mb-2 tracking-wide">Hey there, I'm</p>
+                            <p className="text-gray-400 text-lg font-medium mb-2 tracking-wide">{data.greeting}</p>
                             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 leading-[1.05] tracking-tight">
-                                <span className="text-white">Shanjai</span>{' '}
+                                <span className="text-white">{data.nameFirst}</span>{' '}
                                 <span
                                     style={{
                                         background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%)',
@@ -84,7 +123,7 @@ const Hero = () => {
                                         backgroundClip: 'text',
                                     }}
                                 >
-                                    Senthilkumar
+                                    {data.nameLast}
                                 </span>
                             </h1>
                         </motion.div>
@@ -98,12 +137,7 @@ const Hero = () => {
                         >
                             <span className="text-blue-400 font-medium">{'< '}</span>
                             <TypeAnimation
-                                sequence={[
-                                    'Full-Stack Developer', 1800,
-                                    'React & Python Engineer', 1800,
-                                    'Problem Solver', 1800,
-                                    'Clean Code Advocate', 1800,
-                                ]}
+                                sequence={data.roles.flatMap(role => [role, 1800])}
                                 wrapper="span"
                                 speed={55}
                                 repeat={Infinity}
@@ -119,10 +153,7 @@ const Hero = () => {
                             transition={{ delay: 0.6 }}
                             className="text-gray-400 text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
                         >
-                            CS Graduate (2024) building scalable, beautiful web apps with
-                            <span className="text-blue-300 font-medium"> React</span>,{' '}
-                            <span className="text-purple-300 font-medium">Python</span> &{' '}
-                            <span className="text-cyan-300 font-medium">C++</span>. Passionate about turning complex problems into elegant solutions.
+                            {data.bioText || (data.bioHtml ? data.bioHtml.replace(/<[^>]*>/g, '') : '')}
                         </motion.p>
 
                         {/* CTA Buttons */}
@@ -143,7 +174,7 @@ const Hero = () => {
                             </button>
 
                             <a
-                                href="/Shanjai_S_Resume.pdf"
+                                href={data.cvUrl}
                                 download
                                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-gray-300 border border-gray-700/60 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-gray-500 hover:text-white transition-all duration-300 hover:scale-105"
                             >
@@ -162,9 +193,9 @@ const Hero = () => {
                             <span className="text-gray-600 text-xs uppercase tracking-widest">Find me on</span>
                             <div className="flex gap-3">
                                 {[
-                                    { icon: Github, href: 'https://github.com/Shanjai110603', label: 'GitHub' },
-                                    { icon: Linkedin, href: 'https://www.linkedin.com/in/shanjaisenthilkumar/', label: 'LinkedIn' },
-                                    { icon: Mail, href: 'mailto:shanjaisenthilkumar03@gmail.com', label: 'Email' },
+                                    { icon: Github, href: data.githubUrl, label: 'GitHub' },
+                                    { icon: Linkedin, href: data.linkedinUrl, label: 'LinkedIn' },
+                                    { icon: Mail, href: `mailto:${data.emailAddr}`, label: 'Email' },
                                 ].map(({ icon: Icon, href, label }) => (
                                     <a
                                         key={label}
@@ -182,63 +213,65 @@ const Hero = () => {
                     </motion.div>
 
                     {/* ── Right: Profile Image ── */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-                        className="lg:w-1/2 flex justify-center relative"
-                    >
-                        {/* Glow behind image */}
-                        <div
-                            className="absolute inset-0 rounded-3xl opacity-40 blur-3xl scale-75"
-                            style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4))' }}
-                        />
-
-                        <Tilt
-                            tiltMaxAngleX={8}
-                            tiltMaxAngleY={8}
-                            perspective={1200}
-                            scale={1.03}
-                            transitionSpeed={800}
-                            className="relative z-10"
+                    {data.showImage !== false && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 40 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+                            className="lg:w-1/2 flex justify-center relative"
                         >
-                            {/* Outer ring */}
+                            {/* Glow behind image */}
                             <div
-                                className="p-[3px] rounded-3xl"
-                                style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)', backgroundSize: '300% 300%', animation: 'gradient-shift 4s ease infinite' }}
+                                className="absolute inset-0 rounded-3xl opacity-40 blur-3xl scale-75"
+                                style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4))' }}
+                            />
+
+                            <Tilt
+                                tiltMaxAngleX={8}
+                                tiltMaxAngleY={8}
+                                perspective={1200}
+                                scale={1.03}
+                                transitionSpeed={800}
+                                className="relative z-10"
                             >
-                                <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-[22px] overflow-hidden bg-gray-950">
-                                    <img
-                                        src={ProfileImage}
-                                        alt="Shanjai S"
-                                        className="w-full h-full object-cover object-[50%_15%] scale-105 hover:scale-110 transition-transform duration-700"
-                                    />
-                                    {/* Overlay gradient at bottom */}
-                                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-950/80 to-transparent" />
+                                {/* Outer ring */}
+                                <div
+                                    className="p-[3px] rounded-3xl"
+                                    style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)', backgroundSize: '300% 300%', animation: 'gradient-shift 4s ease infinite' }}
+                                >
+                                    <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-[22px] overflow-hidden bg-gray-950">
+                                        <img
+                                            src={ProfileImage}
+                                            alt="Shanjai S"
+                                            className="w-full h-full object-cover object-[50%_15%] scale-105 hover:scale-110 transition-transform duration-700"
+                                        />
+                                        {/* Overlay gradient at bottom */}
+                                        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-950/80 to-transparent" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Floating badge — top right */}
-                            <motion.div
-                                animate={{ y: [-5, 5, -5] }}
-                                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                                className="absolute -top-4 -right-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
-                                style={{ background: 'rgba(59,130,246,0.15)', borderColor: 'rgba(59,130,246,0.4)', color: '#93c5fd' }}
-                            >
-                                🚀 CS Graduate 2024
-                            </motion.div>
+                                {/* Floating badge — top right */}
+                                <motion.div
+                                    animate={{ y: [-5, 5, -5] }}
+                                    transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                                    className="absolute -top-4 -right-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
+                                    style={{ background: 'rgba(59,130,246,0.15)', borderColor: 'rgba(59,130,246,0.4)', color: '#93c5fd' }}
+                                >
+                                    {data.badgeTopRight}
+                                </motion.div>
 
-                            {/* Floating badge — bottom left */}
-                            <motion.div
-                                animate={{ y: [5, -5, 5] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                                className="absolute -bottom-4 -left-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
-                                style={{ background: 'rgba(139,92,246,0.15)', borderColor: 'rgba(139,92,246,0.4)', color: '#c4b5fd' }}
-                            >
-                                ⚡ Full-Stack Dev
-                            </motion.div>
-                        </Tilt>
-                    </motion.div>
+                                {/* Floating badge — bottom left */}
+                                <motion.div
+                                    animate={{ y: [5, -5, 5] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                                    className="absolute -bottom-4 -left-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
+                                    style={{ background: 'rgba(139,92,246,0.15)', borderColor: 'rgba(139,92,246,0.4)', color: '#c4b5fd' }}
+                                >
+                                    {data.badgeBottomLeft}
+                                </motion.div>
+                            </Tilt>
+                        </motion.div>
+                    )}
 
                 </div>
 

@@ -3,14 +3,23 @@ import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Coffee, Layers, Clock } from 'lucide-react';
 
-const SITE_INFO_KEY = 'portfolio_siteinfo';
+export const STATS_KEY = 'portfolio_stats';
 
-const defaultStats = [
-    { icon: Layers, label: 'Projects Built', value: 10, suffix: '+', color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/15' },
-    { icon: Clock, label: 'Years Coding', value: 3, suffix: '+', color: 'text-purple-400', bg: 'from-purple-500/10 to-purple-600/5', border: 'border-purple-500/15' },
-    { icon: Code2, label: 'Technologies', value: 15, suffix: '+', color: 'text-cyan-400', bg: 'from-cyan-500/10 to-cyan-600/5', border: 'border-cyan-500/15' },
-    { icon: Coffee, label: 'Cups of Coffee', value: 500, suffix: '+', color: 'text-amber-400', bg: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/15' },
+export const defaultStats = [
+    { id: 1, icon: 'Layers', label: 'Projects Built', value: 10, suffix: '+', color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/15' },
+    { id: 2, icon: 'Clock', label: 'Years Coding', value: 3, suffix: '+', color: 'text-purple-400', bg: 'from-purple-500/10 to-purple-600/5', border: 'border-purple-500/15' },
+    { id: 3, icon: 'Code2', label: 'Technologies', value: 15, suffix: '+', color: 'text-cyan-400', bg: 'from-cyan-500/10 to-cyan-600/5', border: 'border-cyan-500/15' },
+    { id: 4, icon: 'Coffee', label: 'Cups of Coffee', value: 500, suffix: '+', color: 'text-amber-400', bg: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/15' },
 ];
+
+const getStatsData = () => {
+    try {
+        const stored = localStorage.getItem(STATS_KEY);
+        return stored ? JSON.parse(stored) : defaultStats;
+    } catch { return defaultStats; }
+};
+
+export const ICON_MAP = { Code2, Coffee, Layers, Clock };
 
 const useCountUp = (target, duration = 1800, inView = false) => {
     const [count, setCount] = useState(0);
@@ -55,7 +64,10 @@ const StatCard = ({ icon: Icon, label, value, suffix, color, bg, border, delay }
             </div>
 
             <div className={`w-11 h-11 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center mb-4 ${color}`}>
-                <Icon size={20} />
+                {(() => {
+                    const IconComponent = ICON_MAP[Icon] || Layers;
+                    return <IconComponent size={20} />;
+                })()}
             </div>
 
             <div className={`text-4xl font-black tabular-nums mb-1 ${color}`}>
@@ -67,16 +79,7 @@ const StatCard = ({ icon: Icon, label, value, suffix, color, bg, border, delay }
 };
 
 const Stats = () => {
-    let stats = defaultStats;
-    try {
-        const si = localStorage.getItem(SITE_INFO_KEY);
-        if (si) {
-            const parsed = JSON.parse(si);
-            if (parsed.stats) {
-                stats = defaultStats.map((s, i) => ({ ...s, value: parsed.stats[i] ?? s.value }));
-            }
-        }
-    } catch { /* ignore */ }
+    const stats = getStatsData();
 
     return (
         <section className="py-20 relative">

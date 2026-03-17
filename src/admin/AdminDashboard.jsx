@@ -2,19 +2,30 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, FolderKanban, Zap, MessageSquare,
-    Settings, LogOut, Menu, X, Terminal, ChevronRight
+    Settings, LogOut, Menu, X, Terminal, ChevronRight, Home, User, Briefcase, GraduationCap, Activity, Palette
 } from 'lucide-react';
+import HeroTab from './tabs/HeroTab';
+import AboutTab from './tabs/AboutTab';
+import ExperienceTab from './tabs/ExperienceTab';
+import EducationTab from './tabs/EducationTab';
+import StatsTab from './tabs/StatsTab';
 import ProjectsTab from './tabs/ProjectsTab';
 import SkillsTab from './tabs/SkillsTab';
 import MessagesTab from './tabs/MessagesTab';
 import SiteInfoTab from './tabs/SiteInfoTab';
-import { clearSession } from './AdminLogin';
+import ThemeTab from './tabs/ThemeTab';
 
 const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'hero', label: 'Hero', icon: Home },
+    { id: 'about', label: 'About', icon: User },
+    { id: 'experience', label: 'Experience', icon: Briefcase },
+    { id: 'education', label: 'Education', icon: GraduationCap },
+    { id: 'stats', label: 'Stats', icon: Activity },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'skills', label: 'Skills', icon: Zap },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
+    { id: 'theme', label: 'Theme', icon: Palette },
     { id: 'siteinfo', label: 'Site Info', icon: Settings },
 ];
 
@@ -68,16 +79,21 @@ const AdminDashboard = ({ onLogout }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleLogout = () => {
-        clearSession();
         onLogout();
     };
 
     const renderTab = () => {
         switch (activeTab) {
             case 'overview': return <OverviewTab onNavigate={setActiveTab} />;
+            case 'hero': return <HeroTab />;
+            case 'about': return <AboutTab />;
+            case 'experience': return <ExperienceTab />;
+            case 'education': return <EducationTab />;
+            case 'stats': return <StatsTab />;
             case 'projects': return <ProjectsTab />;
             case 'skills': return <SkillsTab />;
             case 'messages': return <MessagesTab />;
+            case 'theme': return <ThemeTab />;
             case 'siteinfo': return <SiteInfoTab />;
             default: return null;
         }

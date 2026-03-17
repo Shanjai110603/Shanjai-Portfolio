@@ -31,6 +31,7 @@ const Navbar = () => {
         { name: 'Skills', id: 'skills' },
         { name: 'Projects', id: 'projects' },
         { name: 'Experience', id: 'experience' },
+        { name: 'Education', id: 'education' },
         { name: 'Contact', id: 'contact' },
     ];
 
@@ -91,11 +92,6 @@ const Navbar = () => {
                         className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-white/10 hover:border-white/15 transition-all">
                         <Linkedin size={15} />
                     </a>
-                    <a href="/admin"
-                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 hover:text-cyan-400 hover:bg-white/10 hover:border-white/15 transition-all"
-                        title="Admin Panel">
-                        <Settings size={14} />
-                    </a>
                 </div>
 
                 {/* Mobile toggle */}
@@ -131,10 +127,6 @@ const Navbar = () => {
                         <a href="https://www.linkedin.com/in/shanjaisenthilkumar/" target="_blank" rel="noopener noreferrer"
                             className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
                             <Linkedin size={16} />
-                        </a>
-                        <a href="/admin"
-                            className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400">
-                            <Settings size={15} />
                         </a>
                     </div>
                 </div>

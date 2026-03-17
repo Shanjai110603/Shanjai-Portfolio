@@ -6,7 +6,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#6B7280", // Placeholder, will refine with shades
+        cyan: {
+          400: 'rgb(var(--theme-primary-400) / <alpha-value>)',
+          500: 'rgb(var(--theme-primary-500) / <alpha-value>)',
+          600: 'rgb(var(--theme-primary-600) / <alpha-value>)',
+        },
+        blue: {
+          400: 'rgb(var(--theme-secondary-400) / <alpha-value>)',
+          500: 'rgb(var(--theme-secondary-500) / <alpha-value>)',
+          600: 'rgb(var(--theme-secondary-600) / <alpha-value>)',
+        }
       },
     },
   },

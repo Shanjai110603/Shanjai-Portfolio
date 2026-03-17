@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { fetchPortfolioData } from './lib/api';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
@@ -15,32 +16,56 @@ import FloatingContact from './components/FloatingContact';
 import ScrollToTop from './components/ScrollToTop';
 import AdminApp from './admin/AdminApp';
 import LoadingScreen from './components/LoadingScreen';
+import AllProjects from './pages/AllProjects';
+import AnimatedBackground from './components/AnimatedBackground';
+import { SITEINFO_KEY, defaultSiteInfo } from './admin/tabs/SiteInfoTab';
+
+// Read current settings synchronously from localStorage so theme applies instantly
+const getInitialSettings = () => {
+  try {
+    const stored = localStorage.getItem(SITEINFO_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return { ...defaultSiteInfo.globalSettings, ...(parsed.globalSettings || {}) };
+    }
+  } catch {}
+  return defaultSiteInfo.globalSettings;
+};
 
 const Portfolio = () => {
   const [loading, setLoading] = useState(true);
+  const [globalSettings, setGlobalSettings] = useState(getInitialSettings);
 
   useEffect(() => {
-    // Show loading for ~2.8s then reveal portfolio
-    const timer = setTimeout(() => setLoading(false), 2800);
-    return () => clearTimeout(timer);
+    // Load config — localStorage already populated, Supabase syncs in background
+    fetchPortfolioData(SITEINFO_KEY, defaultSiteInfo).then(info => {
+      if (info.globalSettings) {
+        setGlobalSettings({ ...defaultSiteInfo.globalSettings, ...info.globalSettings });
+      }
+      // Show loading for ~2.8s then reveal portfolio
+      setTimeout(() => setLoading(false), 2800);
+    });
   }, []);
 
   if (loading) return <LoadingScreen />;
 
+  const themeClass = `min-h-screen bg-gray-950 text-white font-sans selection:bg-cyan-500/30 selection:text-cyan-50 relative theme-${globalSettings.globalTheme || 'cyan'}`;
+
   return (
-    <div className="min-h-screen bg-gray-950 text-white font-sans selection:bg-cyan-500 selection:text-white">
+    <div className={themeClass}>
+      {globalSettings.enableAnimatedBackground && <AnimatedBackground />}
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
-        <Stats />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Education />
-        <Contact />
+        {globalSettings.showStats && <Stats />}
+        {globalSettings.showAbout && <About />}
+        {globalSettings.showSkills && <Skills />}
+        {globalSettings.showProjects && <Projects />}
+        {globalSettings.showExperience && <Experience />}
+        {globalSettings.showEducation && <Education />}
+        {globalSettings.showContact && <Contact />}
       </main>
-      <Footer />
+      <Footer className="relative z-10" />
       <FloatingContact />
       <ScrollToTop />
     </div>
@@ -52,6 +77,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Portfolio />} />
+        <Route path="/projects" element={<AllProjects />} />
         <Route path="/admin" element={<AdminApp />} />
         <Route path="/admin/*" element={<AdminApp />} />
       </Routes>

@@ -1,32 +1,35 @@
 import { useState } from 'react';
-import { Lock, Eye, EyeOff, Terminal } from 'lucide-react';
+import { Lock, Eye, EyeOff, Terminal, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const PASSWORD_KEY = 'admin_password';
-const SESSION_KEY = 'admin_session';
-
-const getPassword = () => localStorage.getItem(PASSWORD_KEY) || 'admin123';
-
-export const checkSession = () => sessionStorage.getItem(SESSION_KEY) === 'true';
-export const clearSession = () => sessionStorage.removeItem(SESSION_KEY);
+import { supabase } from '../lib/supabase';
 
 const AdminLogin = ({ onLogin }) => {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [show, setShow] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [shaking, setShaking] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (password === getPassword()) {
-            sessionStorage.setItem(SESSION_KEY, 'true');
-            onLogin();
-        } else {
-            setError('Incorrect password');
+        setLoading(true);
+        setError('');
+
+        const { error: authError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (authError) {
+            setError(authError.message || 'Invalid login credentials');
             setShaking(true);
             setTimeout(() => setShaking(false), 600);
             setPassword('');
+        } else {
+            if (onLogin) onLogin();
         }
+        setLoading(false);
     };
 
     return (
@@ -56,7 +59,25 @@ const AdminLogin = ({ onLogin }) => {
                         <p className="text-gray-500 text-sm">Shanjai Portfolio · Management</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Admin Email</label>
+                            <div className="relative">
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                                    <Mail size={16} />
+                                </div>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={e => { setEmail(e.target.value); setError(''); }}
+                                    className="w-full bg-gray-950 border border-gray-800 focus:border-cyan-500 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none transition-colors placeholder-gray-600"
+                                    placeholder="admin@example.com"
+                                    autoFocus
+                                    required
+                                />
+                            </div>
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
                             <div className="relative">
@@ -69,7 +90,7 @@ const AdminLogin = ({ onLogin }) => {
                                     onChange={e => { setPassword(e.target.value); setError(''); }}
                                     className="w-full bg-gray-950 border border-gray-800 focus:border-cyan-500 rounded-lg pl-10 pr-10 py-3 text-white focus:outline-none transition-colors placeholder-gray-600"
                                     placeholder="Enter admin password"
-                                    autoFocus
+                                    required
                                 />
                                 <button
                                     type="button"
@@ -84,14 +105,15 @@ const AdminLogin = ({ onLogin }) => {
 
                         <button
                             type="submit"
-                            className="w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
+                            disabled={loading}
+                            className={`w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold transition-all ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-cyan-500/25'}`}
                         >
-                            Login
+                            {loading ? 'Authenticating...' : 'Login'}
                         </button>
                     </form>
 
                     <p className="text-center text-gray-600 text-xs mt-6">
-                        Default password: <span className="font-mono text-gray-500">admin123</span>
+                        Secured by Supabase Authentication
                     </p>
                 </div>
             </motion.div>
@@ -109,5 +131,4 @@ const AdminLogin = ({ onLogin }) => {
     );
 };
 
-export { PASSWORD_KEY };
 export default AdminLogin;

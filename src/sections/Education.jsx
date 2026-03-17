@@ -2,37 +2,55 @@
 import { motion } from 'framer-motion';
 import { GraduationCap, Award, BookOpen, ExternalLink } from 'lucide-react';
 
-const educationData = [
-    {
-        degree: 'B.Sc Computer Science (Cognitive Systems)',
-        institution: 'Karpagam Academy of Higher Education, Coimbatore',
-        year: '2024',
-        grade: 'CGPA: 8.49',
-        highlight: true,
-    },
-    {
-        degree: 'HSC — State Board',
-        institution: 'Sree Adharsh Matriculation HSS',
-        year: '2021',
-        grade: '87.4%',
-        highlight: false,
-    },
-    {
-        degree: 'SSLC — State Board',
-        institution: 'Sree Adharsh Matriculation HSS',
-        year: '2019',
-        grade: '77.2%',
-        highlight: false,
-    },
-];
+export const defaultEducation = {
+    education: [
+        {
+            id: 1,
+            degree: 'B.Sc Computer Science (Cognitive Systems)',
+            institution: 'Karpagam Academy of Higher Education, Coimbatore',
+            year: '2024',
+            grade: 'CGPA: 8.49',
+            highlight: true,
+        },
+        {
+            id: 2,
+            degree: 'HSC — State Board',
+            institution: 'Sree Adharsh Matriculation HSS',
+            year: '2021',
+            grade: '87.4%',
+            highlight: false,
+        },
+        {
+            id: 3,
+            degree: 'SSLC — State Board',
+            institution: 'Sree Adharsh Matriculation HSS',
+            year: '2019',
+            grade: '77.2%',
+            highlight: false,
+        },
+    ],
+    certifications: [
+        { id: 101, name: 'Python Programming', provider: 'Skillrack', color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
+        { id: 102, name: 'C Programming', provider: 'Skillrack', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+        { id: 103, name: 'Python (Elite)', provider: 'NPTEL', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+    ],
+    quote: "Continuously learning and expanding my stack — always pursuing mastery."
+};
 
-const certifications = [
-    { name: 'Python Programming', provider: 'Skillrack', color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
-    { name: 'C Programming', provider: 'Skillrack', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-    { name: 'Python (Elite)', provider: 'NPTEL', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
-];
+export const EDU_KEY = 'portfolio_education';
 
-const Education = () => (
+const getEducationData = () => {
+    try {
+        const stored = localStorage.getItem(EDU_KEY);
+        return stored ? JSON.parse(stored) : defaultEducation;
+    } catch { return defaultEducation; }
+};
+
+const Education = () => {
+    const data = getEducationData();
+    const { education, certifications, quote } = data;
+    
+    return (
     <section id="education" className="py-28 relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         <div className="absolute bottom-20 left-0 w-72 h-72 -z-10 opacity-15"
@@ -65,7 +83,7 @@ const Education = () => (
                     <div className="relative">
                         <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/40 to-transparent" />
                         <div className="space-y-6">
-                            {educationData.map((edu, i) => (
+                            {education.map((edu, i) => (
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, x: -20 }}
@@ -129,7 +147,7 @@ const Education = () => (
                         >
                             <BookOpen size={16} className="text-gray-500 mb-2" />
                             <p className="text-gray-500 text-sm leading-relaxed italic">
-                                "Continuously learning and expanding my stack — always pursuing mastery."
+                                "{quote}"
                             </p>
                         </motion.div>
                     </div>
@@ -138,6 +156,7 @@ const Education = () => (
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
     </section>
-);
+    );
+};
 
 export default Education;

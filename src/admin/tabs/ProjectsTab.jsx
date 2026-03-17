@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, Save, Edit2, X, Check } from 'lucide-react';
+import { Plus, Trash2, Save, Edit2, X, Check, Star, DownloadCloud } from 'lucide-react';
 import { PROJECTS_KEY, defaultProjects } from '../../sections/Projects';
 
 const GRADIENT_OPTIONS = [
@@ -18,7 +18,8 @@ const emptyProject = () => ({
     tech: [],
     github: '',
     demo: '',
-    color: 'from-cyan-500 to-blue-600'
+    color: 'from-cyan-500 to-blue-600',
+    featured: false
 });
 
 const getProjects = () => {
@@ -142,6 +143,43 @@ const ProjectsTab = () => {
         if (confirm('Delete this project?')) commit(projects.filter(p => p.id !== id));
     };
 
+    const handleToggleFeatured = (id) => {
+        commit(projects.map(p => p.id === id ? { ...p, featured: !p.featured } : p));
+    };
+
+    const handleFetchGithub = async () => {
+        try {
+            const res = await fetch('https://api.github.com/users/Shanjai110603/repos?sort=updated');
+            if (!res.ok) throw new Error('Failed to fetch');
+            const data = await res.json();
+            
+            const newProjects = data.map(repo => ({
+                id: repo.id,
+                title: repo.name.replace(/[-_]/g, ' '),
+                description: repo.description || 'No description available.',
+                tech: repo.language ? [repo.language] : [],
+                github: repo.html_url,
+                demo: repo.homepage || '#',
+                color: 'from-cyan-500 to-blue-600',
+                highlight: '',
+                featured: false
+            }));
+
+            // Merge with existing avoiding duplicates
+            const existingUrls = new Set(projects.map(p => p.github));
+            const toAdd = newProjects.filter(p => !existingUrls.has(p.github));
+            
+            if (toAdd.length > 0) {
+                commit([...toAdd, ...projects]);
+                alert(`Imported ${toAdd.length} new repositories!`);
+            } else {
+                alert('No new repositories found.');
+            }
+        } catch (error) {
+            alert('Error fetching GitHub repos: ' + error.message);
+        }
+    };
+
     const handleReset = () => {
         if (confirm('Reset to default projects?')) {
             save(defaultProjects);
@@ -152,9 +190,15 @@ const ProjectsTab = () => {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-white">Projects <span className="text-gray-500 font-normal text-sm ml-2">({projects.length})</span></h2>
+                <div>
+                    <h2 className="text-xl font-bold text-white">Projects <span className="text-gray-500 font-normal text-sm ml-2">({projects.length})</span></h2>
+                    <p className="text-xs text-cyan-400 mt-1">{projects.filter(p => p.featured).length} Featured on Home</p>
+                </div>
                 <div className="flex gap-3">
                     {saved && <span className="flex items-center gap-1 text-green-400 text-sm"><Check size={14} /> Saved</span>}
+                    <button onClick={handleFetchGithub} className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 hover:text-white rounded-lg text-sm transition-colors border border-gray-700 hover:border-gray-600">
+                        <DownloadCloud size={14} /> Sync GitHub
+                    </button>
                     <button onClick={handleReset} className="text-xs text-gray-500 hover:text-gray-300 transition-colors px-3 py-1.5 bg-gray-800 rounded-lg">Reset Defaults</button>
                     <button onClick={() => setEditing('new')}
                         className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-cyan-500/25 transition-all">
@@ -187,6 +231,12 @@ const ProjectsTab = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onClick={() => handleToggleFeatured(project.id)}
+                                        className={`p-2 transition-all rounded-lg ${project.featured ? 'text-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/20' : 'text-gray-400 hover:text-yellow-400 hover:bg-yellow-400/10'}`}
+                                        title={project.featured ? "Unfeature" : "Feature on Home"}
+                                    >
+                                        <Star size={15} fill={project.featured ? "currentColor" : "none"} />
+                                    </button>
                                     <button onClick={() => setEditing(project.id)}
                                         className="p-2 text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-lg transition-all">
                                         <Edit2 size={15} />

@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import { Link } from 'react-router-dom';
 
 const defaultProjects = [
     {
@@ -13,6 +14,7 @@ const defaultProjects = [
         demo: '#',
         color: 'from-orange-500 to-pink-600',
         highlight: 'Cybersecurity',
+        featured: true,
     },
     {
         id: 2,
@@ -23,6 +25,7 @@ const defaultProjects = [
         demo: '#',
         color: 'from-cyan-500 to-blue-600',
         highlight: 'Lead Gen',
+        featured: true,
     },
     {
         id: 3,
@@ -33,6 +36,7 @@ const defaultProjects = [
         demo: '#',
         color: 'from-violet-500 to-purple-700',
         highlight: 'Open Source',
+        featured: true,
     },
     {
         id: 4,
@@ -43,6 +47,7 @@ const defaultProjects = [
         demo: '#',
         color: 'from-emerald-500 to-teal-600',
         highlight: 'Scripting',
+        featured: true,
     },
 ];
 
@@ -58,7 +63,8 @@ const getProjects = () => {
 export { defaultProjects };
 
 const Projects = () => {
-    const projects = getProjects();
+    const allProjects = getProjects();
+    const projects = allProjects.filter(p => p.featured).slice(0, 4);
 
     return (
         <section id="projects" className="py-28 relative">
@@ -163,14 +169,12 @@ const Projects = () => {
                     viewport={{ once: true }}
                     className="text-center mt-12"
                 >
-                    <a
-                        href="https://github.com/Shanjai110603"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <Link
+                        to="/projects"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-blue-400 border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/40 hover:scale-105 transition-all"
                     >
-                        View All on GitHub <ArrowRight size={15} />
-                    </a>
+                        View All Projects <ArrowRight size={15} />
+                    </Link>
                 </motion.div>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />

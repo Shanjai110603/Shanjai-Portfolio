@@ -2,8 +2,9 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 
-const experiences = [
+export const defaultExperiences = [
     {
+        id: 1,
         role: 'Internet of Things (IoT) Intern',
         company: 'Industrial Training',
         type: 'Internship',
@@ -18,6 +19,15 @@ const experiences = [
     },
 ];
 
+export const EXP_KEY = 'portfolio_experience';
+
+const getExperienceData = () => {
+    try {
+        const stored = localStorage.getItem(EXP_KEY);
+        return stored ? JSON.parse(stored) : defaultExperiences;
+    } catch { return defaultExperiences; }
+};
+
 const colorMap = {
     blue: {
         dot: 'bg-blue-500 shadow-blue-500/50',
@@ -26,9 +36,33 @@ const colorMap = {
         glow: 'from-blue-500/8',
         icon: 'text-blue-400',
     },
+    purple: {
+        dot: 'bg-purple-500 shadow-purple-500/50',
+        badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+        border: 'border-purple-500/20',
+        glow: 'from-purple-500/8',
+        icon: 'text-purple-400',
+    },
+    cyan: {
+        dot: 'bg-cyan-500 shadow-cyan-500/50',
+        badge: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+        border: 'border-cyan-500/20',
+        glow: 'from-cyan-500/8',
+        icon: 'text-cyan-400',
+    },
+    emerald: {
+        dot: 'bg-emerald-500 shadow-emerald-500/50',
+        badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+        border: 'border-emerald-500/20',
+        glow: 'from-emerald-500/8',
+        icon: 'text-emerald-400',
+    },
 };
 
-const Experience = () => (
+const Experience = () => {
+    const experiences = getExperienceData();
+    
+    return (
     <section id="experience" className="py-28 relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
@@ -113,6 +147,7 @@ const Experience = () => (
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
     </section>
-);
+    );
+};
 
 export default Experience;
