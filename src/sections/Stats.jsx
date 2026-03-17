@@ -53,10 +53,9 @@ const StatCard = ({ icon: Icon, label, value, suffix, color, bg, border, delay }
             ref={ref}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.02 }}
             transition={{ duration: 0.5, delay }}
             viewport={{ once: true }}
-            className={`relative p-6 rounded-2xl bg-gradient-to-br ${bg} border ${border} backdrop-blur-sm overflow-hidden group cursor-default`}
+            className={`relative p-6 rounded-2xl bg-gray-950 bg-gradient-to-br border backdrop-blur-sm overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-200 ${bg} ${border}`}
         >
             {/* Background number */}
             <div className={`absolute -right-2 -bottom-3 text-7xl font-black opacity-5 select-none ${color}`}>

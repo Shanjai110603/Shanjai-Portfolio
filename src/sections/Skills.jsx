@@ -163,7 +163,7 @@ const Skills = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: catIndex * 0.1 }}
                                 viewport={{ once: true }}
-                                className={`p-6 rounded-2xl bg-gradient-to-br ${theme.grad} border backdrop-blur-sm hover:scale-[1.01] transition-transform duration-300`}
+                                className={`p-6 rounded-2xl bg-gray-950 bg-gradient-to-br border backdrop-blur-sm cursor-pointer hover:brightness-110 transition-all duration-200 ${theme.grad}`}
                             >
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-mono font-bold text-sm text-white">
