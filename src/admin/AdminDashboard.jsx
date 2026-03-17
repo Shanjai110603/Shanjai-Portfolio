@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, FolderKanban, Zap, MessageSquare,
-    Settings, LogOut, Menu, X, Terminal, ChevronRight, Home, User, Briefcase, GraduationCap, Activity, Palette
+    Settings, LogOut, Menu, X, Terminal, ChevronRight, Home, User, Briefcase, GraduationCap, Activity, Palette, Image
 } from 'lucide-react';
 import HeroTab from './tabs/HeroTab';
 import AboutTab from './tabs/AboutTab';
@@ -14,6 +14,7 @@ import SkillsTab from './tabs/SkillsTab';
 import MessagesTab from './tabs/MessagesTab';
 import SiteInfoTab from './tabs/SiteInfoTab';
 import ThemeTab from './tabs/ThemeTab';
+import MediaTab from './tabs/MediaTab';
 
 const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -24,6 +25,7 @@ const tabs = [
     { id: 'stats', label: 'Stats', icon: Activity },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'skills', label: 'Skills', icon: Zap },
+    { id: 'media', label: 'Media', icon: Image },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
     { id: 'theme', label: 'Theme', icon: Palette },
     { id: 'siteinfo', label: 'Site Info', icon: Settings },
@@ -92,6 +94,7 @@ const AdminDashboard = ({ onLogout }) => {
             case 'stats': return <StatsTab />;
             case 'projects': return <ProjectsTab />;
             case 'skills': return <SkillsTab />;
+            case 'media': return <MediaTab />;
             case 'messages': return <MessagesTab />;
             case 'theme': return <ThemeTab />;
             case 'siteinfo': return <SiteInfoTab />;

@@ -69,3 +69,42 @@ export const savePortfolioData = async (id, payload) => {
 
     return true; // localStorage save succeeded, that's what matters
 };
+/**
+ * Upload a file to Supabase Storage and return its public URL.
+ * bucket: 'portfolio-assets'
+ * folder: 'images' | 'resumes'
+ */
+export const uploadFile = async (file, folder) => {
+    const ext = file.name.split('.').pop();
+    const filename = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await supabase.storage
+        .from('portfolio-assets')
+        .upload(filename, file, { cacheControl: '3600', upsert: false });
+
+    if (error) {
+        console.error('Upload failed:', error.message);
+        return null;
+    }
+
+    const { data } = supabase.storage
+        .from('portfolio-assets')
+        .getPublicUrl(filename);
+
+    return data?.publicUrl || null;
+};
+
+/**
+ * Delete a file from Supabase Storage by its public URL.
+ */
+export const deleteFile = async (publicUrl) => {
+    try {
+        // Extract path after the bucket name in the public URL
+        const parts = publicUrl.split('/portfolio-assets/');
+        if (parts.length < 2) return false;
+        const path = parts[1];
+        const { error } = await supabase.storage.from('portfolio-assets').remove([path]);
+        if (error) { console.warn('Delete failed:', error.message); return false; }
+        return true;
+    } catch { return false; }
+};

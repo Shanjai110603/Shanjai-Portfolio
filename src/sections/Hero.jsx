@@ -22,6 +22,7 @@ const defaultHeroData = {
 };
 
 export const HERO_KEY = 'portfolio_hero';
+const MEDIA_KEY = 'portfolio_media';
 
 // Strip any HTML tags from old stored data
 const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
@@ -29,14 +30,31 @@ const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi
 const getHeroData = () => {
     try {
         const stored = localStorage.getItem(HERO_KEY);
-        if (!stored) return defaultHeroData;
-        const parsed = JSON.parse(stored);
+        const parsed = stored ? JSON.parse(stored) : {};
         // Migrate old `bioHtml` to `bioText` by stripping tags
         if (parsed.bioHtml && !parsed.bioText) {
             parsed.bioText = stripHtml(parsed.bioHtml);
             delete parsed.bioHtml;
         }
-        return { ...defaultHeroData, ...parsed };
+        const heroData = { ...defaultHeroData, ...parsed };
+
+        // Merge in active media URLs
+        try {
+            const mediaStored = localStorage.getItem(MEDIA_KEY);
+            if (mediaStored) {
+                const media = JSON.parse(mediaStored);
+                if (media.images?.length > 0) {
+                    const idx = media.activeImageIndex ?? 0;
+                    heroData._activeImageUrl = media.images[idx]?.url || null;
+                }
+                if (media.resumes?.length > 0) {
+                    const idx = media.activeResumeIndex ?? 0;
+                    heroData._activeCvUrl = media.resumes[idx]?.url || null;
+                }
+            }
+        } catch {}
+
+        return heroData;
     } catch { return defaultHeroData; }
 };
 
@@ -174,7 +192,7 @@ const Hero = () => {
                             </button>
 
                             <a
-                                href={data.cvUrl}
+                                href={data._activeCvUrl || data.cvUrl}
                                 download
                                 className="inline-flex cursor-pointer items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-gray-300 border border-gray-700/60 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-gray-400 hover:text-white transition-colors duration-200"
                             >
@@ -241,7 +259,7 @@ const Hero = () => {
                                 >
                                     <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-[22px] overflow-hidden bg-gray-950">
                                         <img
-                                            src={ProfileImage}
+                                            src={data._activeImageUrl || ProfileImage}
                                             alt="Shanjai S"
                                             className="w-full h-full object-cover object-[50%_15%] scale-105 hover:scale-110 transition-transform duration-700"
                                         />
