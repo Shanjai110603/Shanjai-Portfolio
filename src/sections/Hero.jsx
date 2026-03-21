@@ -124,7 +124,7 @@ const Hero = () => {
             />
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-14">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-14 pb-20 lg:pb-0">
 
                     {/* ── Left: Text Content ── */}
                     <motion.div
@@ -262,7 +262,7 @@ const Hero = () => {
                             initial={{ opacity: 0, x: 40 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-                            className="lg:w-1/2 flex justify-center relative"
+                            className="lg:w-1/2 flex justify-center relative mt-10 lg:mt-0 mb-12 lg:mb-0"
                         >
                             {/* Glow behind image */}
                             <div

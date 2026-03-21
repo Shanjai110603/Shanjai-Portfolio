@@ -48,14 +48,14 @@
     --theme-secondary-500: 234 179 8;  /* yellow-500 */
     --theme-secondary-600: 202 138 4;  /* yellow-600 */
   }
-}
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  @apply bg-gray-950 text-white min-h-screen overflow-x-hidden;
+  body {
+    @apply bg-gray-950 text-white min-h-screen overflow-x-hidden;
+  }
 }
 
 /* Custom Scrollbar */

@@ -105,12 +105,12 @@ const Projects = () => {
                     <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-400 mb-8" />
 
                     {/* Filter Tabs */}
-                    <div className="flex flex-wrap justify-center gap-2">
+                    <div className="flex overflow-x-auto pb-2 -mb-2 justify-start sm:justify-center gap-3 px-2 hide-scrollbar">
                         {FILTER_TABS.map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveFilter(tab)}
-                                className={`relative px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                                className={`relative px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap shrink-0 flex-1 sm:flex-none ${
                                     activeFilter === tab ? 'text-white' : 'text-gray-400 hover:text-white border border-white/10 bg-white/5 hover:bg-white/10'
                                 }`}
                             >
@@ -178,15 +178,15 @@ const Projects = () => {
                                         <h3 className="text-xl font-archivo font-bold text-white group-hover:text-blue-300 transition-colors leading-snug">
                                             {project.title}
                                         </h3>
-                                        <div className="flex gap-2 shrink-0 ml-2">
+                                        <div className="flex gap-3 shrink-0 ml-2">
                                             <a href={project.github} target="_blank" rel="noopener noreferrer"
-                                               className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                                                <Github size={14} />
+                                               className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                                                <Github size={18} />
                                             </a>
                                             {project.demo && project.demo !== '#' && (
                                                 <a href={project.demo} target="_blank" rel="noopener noreferrer"
-                                                   className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                                                    <ExternalLink size={14} />
+                                                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                                                    <ExternalLink size={18} />
                                                 </a>
                                             )}
                                         </div>

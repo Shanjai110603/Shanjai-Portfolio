@@ -120,7 +120,7 @@ const About = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.7, delay: 0.1 }}
                     viewport={{ once: true }}
-                    className="grid grid-cols-2 gap-4"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
                     {data.highlights.map(({ icon: iconName, title, desc, color, bg, border }, i) => {
                         const Icon = ICON_MAP[iconName] || Code2;
