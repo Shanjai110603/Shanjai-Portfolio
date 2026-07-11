@@ -19,6 +19,13 @@ const defaultSiteInfo = {
     aboutTitle: 'Driven by Logic, Built for Innovation',
     aboutBio1: 'I am a Computer Science Graduate (2024) with a relentless drive to turn complex logic into elegant software. My journey began with mastering the efficiency of C++ and Python, establishing a strong foundation in algorithmic problem-solving.',
     aboutBio2: "Today, I specialize in Full-Stack Development, creating robust applications that blend performance with intuitive design. I thrive on tackling real-world challenges, constantly pushing the boundaries of what's possible through code.",
+    siteName: 'Shanjai S',
+    siteTitle: 'Shanjai S | Full-Stack Developer',
+    siteEmail: 'shanjaisenthilkumar03@gmail.com',
+    siteLocation: 'Coimbatore, Tamil Nadu, India',
+    siteGithub: 'https://github.com/Shanjai110603',
+    siteLinkedin: 'https://www.linkedin.com/in/shanjaisenthilkumar/',
+    githubUsername: 'Shanjai110603',
     globalSettings: {
         showStats: true,
         showAbout: true,
@@ -213,6 +220,42 @@ const SiteInfoTab = () => {
                                     ))}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Brand & Social Info */}
+                    <div className="bg-gray-900/60 border border-purple-500/20 rounded-xl p-5 shadow-lg relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                        <h3 className="text-sm font-semibold text-purple-400 mb-4 flex items-center gap-2"><Palette size={16}/> Brand & Social Identity</h3>
+                        
+                        <div className="space-y-4 relative z-10">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="Brand Name (Navbar/Footer)">
+                                    <input value={info.siteName || ''} onChange={e => set('siteName', e.target.value)} className={inputCls} />
+                                </Field>
+                                <Field label="Site Title Meta">
+                                    <input value={info.siteTitle || ''} onChange={e => set('siteTitle', e.target.value)} className={inputCls} />
+                                </Field>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="Contact Email">
+                                    <input value={info.siteEmail || ''} onChange={e => set('siteEmail', e.target.value)} className={inputCls} />
+                                </Field>
+                                <Field label="Location Text">
+                                    <input value={info.siteLocation || ''} onChange={e => set('siteLocation', e.target.value)} className={inputCls} />
+                                </Field>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="GitHub URL">
+                                    <input value={info.siteGithub || ''} onChange={e => set('siteGithub', e.target.value)} className={inputCls} />
+                                </Field>
+                                <Field label="LinkedIn URL">
+                                    <input value={info.siteLinkedin || ''} onChange={e => set('siteLinkedin', e.target.value)} className={inputCls} />
+                                </Field>
+                            </div>
+                            <Field label="GitHub Username (for API Stats)">
+                                <input value={info.githubUsername || ''} onChange={e => set('githubUsername', e.target.value)} className={inputCls} />
+                            </Field>
                         </div>
                     </div>
                 </div>

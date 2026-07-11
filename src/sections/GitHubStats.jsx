@@ -1,9 +1,8 @@
 import { motion } from 'framer-motion';
 import { Github, Activity } from 'lucide-react';
 
-const GITHUB_USERNAME = 'Shanjai110603';
-
-const GitHubStats = () => {
+const GitHubStats = ({ siteInfo }) => {
+    const GITHUB_USERNAME = siteInfo?.githubUsername || 'Shanjai110603';
     const theme = 'transparent'; // free github-readme-stats theming
 
     const statsUrl = `https://github-readme-stats.vercel.app/api?username=${GITHUB_USERNAME}&show_icons=true&theme=dark&hide_border=true&bg_color=0d1117&title_color=22d3ee&icon_color=3b82f6&text_color=94a3b8&count_private=true`;

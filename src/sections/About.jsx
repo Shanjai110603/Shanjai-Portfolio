@@ -27,7 +27,10 @@ const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi
 
 export { defaultAboutData };
 
-const About = () => {
+const About = ({ siteInfo }) => {
+    const location = siteInfo?.siteLocation || defaultAboutData.location;
+    const email = siteInfo?.siteEmail || defaultAboutData.email;
+    const githubUrl = siteInfo?.siteGithub || defaultAboutData.githubUrl;
     const [data, setData] = useState(() => {
         try {
             const stored = localStorage.getItem(ABOUT_KEY);
@@ -81,11 +84,10 @@ const About = () => {
                     viewport={{ once: true }}
                     className="space-y-6"
                 >
-                    {/* Quick info pills */}
                     <div className="flex flex-wrap gap-3">
                         {[
-                            { icon: MapPin, text: data.location },
-                            { icon: Mail, text: data.email },
+                            { icon: MapPin, text: location },
+                            { icon: Mail, text: email },
                         ].map(({ icon: Icon, text }) => (
                             <span key={text} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 text-sm">
                                 <Icon size={13} className="text-[rgb(var(--theme-primary-400))]" />{text}
@@ -115,7 +117,7 @@ const About = () => {
                             Let's Connect
                         </button>
                         <a
-                            href={data.githubUrl}
+                            href={githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-gray-300 border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white hover:border-gray-400 transition-colors duration-200"

@@ -8,7 +8,9 @@ export const MESSAGES_KEY = STORAGE_KEYS.messages;
 
 const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
-const Contact = () => {
+const Contact = ({ siteInfo }) => {
+    const email = siteInfo?.siteEmail || SITE.email;
+    const location = siteInfo?.siteLocation || SITE.location;
     const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
     const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -92,8 +94,8 @@ const Contact = () => {
                         </div>
 
                         {[
-                            { icon: Mail, label: 'Email', value: SITE.email, href: `mailto:${SITE.email}` },
-                            { icon: MapPin, label: 'Location', value: SITE.location, href: null },
+                            { icon: Mail, label: 'Email', value: email, href: `mailto:${email}` },
+                            { icon: MapPin, label: 'Location', value: location, href: null },
                         ].map(({ icon: Icon, label, value, href }) => (
                             <div key={label} className="flex items-start gap-4 p-4 rounded-xl bg-white/3 border border-white/8 hover:border-white/15 transition-all group">
                                 <div className="w-10 h-10 rounded-xl bg-[rgba(var(--theme-primary-500),0.1)] border border-[rgba(var(--theme-primary-500),0.2)] flex items-center justify-center text-[rgb(var(--theme-primary-400))] shrink-0">

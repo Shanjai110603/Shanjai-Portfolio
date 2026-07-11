@@ -55,12 +55,22 @@ const SectionFallback = () => (
 
 const Portfolio = () => {
   const [loading, setLoading] = useState(true);
-  const [globalSettings, setGlobalSettings] = useState(getInitialSettings);
+  const [siteInfo, setSiteInfo] = useState(() => {
+    try {
+      const stored = localStorage.getItem(SITEINFO_KEY);
+      return stored ? JSON.parse(stored) : defaultSiteInfo;
+    } catch {
+      return defaultSiteInfo;
+    }
+  });
 
   useEffect(() => {
     fetchPortfolioData(SITEINFO_KEY, defaultSiteInfo).then(info => {
-      if (info?.globalSettings) {
-        setGlobalSettings({ ...defaultSiteInfo.globalSettings, ...info.globalSettings });
+      if (info) {
+        setSiteInfo(info);
+        if (info.siteTitle) {
+          document.title = info.siteTitle;
+        }
       }
       setTimeout(() => setLoading(false), 2800);
     });
@@ -68,30 +78,31 @@ const Portfolio = () => {
 
   if (loading) return <LoadingScreen />;
 
+  const globalSettings = siteInfo.globalSettings || defaultSiteInfo.globalSettings;
   const themeClass = `min-h-screen bg-gray-950 text-white font-sans selection:bg-cyan-500/30 selection:text-cyan-50 relative theme-${globalSettings.globalTheme || 'cyan'}`;
 
   return (
     <div className={themeClass}>
       <ScrollProgressBar />
       {globalSettings.enableAnimatedBackground && <AnimatedBackground />}
-      <Navbar />
+      <Navbar siteInfo={siteInfo} />
       <main className="relative z-10">
         {/* Hero is eagerly loaded (above the fold) */}
-        <Hero />
+        <Hero siteInfo={siteInfo} />
         {/* Everything below is lazy — only loaded when scrolled near */}
         <Suspense fallback={<SectionFallback />}>
           {globalSettings.showStats && <Stats />}
-          {globalSettings.showAbout && <About />}
+          {globalSettings.showAbout && <About siteInfo={siteInfo} />}
           {globalSettings.showSkills && <Skills />}
           {globalSettings.showProjects && <Projects />}
-          <GitHubStats />
+          <GitHubStats siteInfo={siteInfo} />
           {globalSettings.showExperience && <Experience />}
           {globalSettings.showEducation && <Education />}
-          {globalSettings.showContact && <Contact />}
+          {globalSettings.showContact && <Contact siteInfo={siteInfo} />}
         </Suspense>
       </main>
-      <Footer />
-      <FloatingContact />
+      <Footer siteInfo={siteInfo} />
+      <FloatingContact siteInfo={siteInfo} />
       <HireMeCTA />
       <ScrollToTop />
     </div>

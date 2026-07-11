@@ -2,7 +2,15 @@
 import { Github, Linkedin, Mail, ArrowUp, MapPin, Code2 } from 'lucide-react';
 import { SITE } from '../lib/constants';
 
-const Footer = () => {
+const Footer = ({ siteInfo }) => {
+    const brandName = siteInfo?.siteName || SITE.name;
+    const siteEmail = siteInfo?.siteEmail || SITE.email;
+    const siteLocation = siteInfo?.siteLocation || SITE.location;
+    const githubLink = siteInfo?.siteGithub || SITE.github;
+    const linkedinLink = siteInfo?.siteLinkedin || SITE.linkedin;
+    const githubUser = siteInfo?.githubUsername || SITE.githubUsername;
+    const linkedinUser = linkedinLink.split('/').filter(Boolean).pop() || 'linkedin';
+    const emailUser = siteEmail.split('@')[0] || 'email';
     const navLinks = [
         { name: 'Home', id: 'home' },
         { name: 'About', id: 'about' },
@@ -28,17 +36,17 @@ const Footer = () => {
                     {/* Brand */}
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <Code2 size={20} className="text-blue-400" />
-                            <span className="text-lg font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                                Shanjai S
+                            <Code2 size={20} className="text-[rgb(var(--theme-primary-400))]" />
+                            <span className="text-lg font-black bg-gradient-to-br from-[rgb(var(--theme-primary-400))] to-[rgb(var(--theme-secondary-400))] bg-clip-text text-transparent">
+                                {brandName}
                             </span>
                         </div>
                         <p className="text-gray-500 text-sm leading-relaxed mb-4">
                             Full-Stack Developer crafting scalable web experiences with modern technologies.
                         </p>
                         <div className="flex items-center gap-1.5 text-gray-600 text-xs">
-                            <MapPin size={11} className="text-blue-400" />
-                            Coimbatore, Tamil Nadu, India
+                            <MapPin size={11} className="text-[rgb(var(--theme-primary-400))]" />
+                            {siteLocation}
                         </div>
                     </div>
 
@@ -62,18 +70,18 @@ const Footer = () => {
                         <p className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Connect</p>
                         <div className="space-y-3">
                             {[
-                                { icon: Github, href: SITE.github, label: 'GitHub', user: SITE.githubUsername },
-                                { icon: Linkedin, href: SITE.linkedin, label: 'LinkedIn', user: 'shanjaisenthilkumar' },
-                                { icon: Mail, href: `mailto:${SITE.email}`, label: 'Email', user: 'shanjaisenthilkumar03' },
+                                { icon: Github, href: githubLink, label: 'GitHub', user: githubUser },
+                                { icon: Linkedin, href: linkedinLink, label: 'LinkedIn', user: linkedinUser },
+                                { icon: Mail, href: `mailto:${siteEmail}`, label: 'Email', user: emailUser },
                             ].map(({ icon: Icon, href, label, user }) => (
                                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                                     className="flex items-center gap-3 group py-1">
-                                    <div className="w-11 h-11 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all">
+                                    <div className="w-11 h-11 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-500 group-hover:text-[rgb(var(--theme-primary-400))] group-hover:border-[rgba(var(--theme-primary-500),0.3)] transition-all">
                                         <Icon size={16} />
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-600 leading-none mb-0.5">{label}</p>
-                                        <p className="text-gray-400 text-sm group-hover:text-blue-400 transition-colors">@{user}</p>
+                                        <p className="text-gray-400 text-sm group-hover:text-[rgb(var(--theme-primary-400))] transition-colors">@{user}</p>
                                     </div>
                                 </a>
                             ))}
@@ -84,10 +92,10 @@ const Footer = () => {
                 {/* Bottom bar */}
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-gray-600 text-xs">
-                        © {new Date().getFullYear()} Shanjai S.  All rights reserved.
+                        © {new Date().getFullYear()} {brandName}.  All rights reserved.
                     </p>
                     <p className="text-gray-700 text-xs">
-                        Built with <span className="text-blue-500">React</span> · <span className="text-purple-500">Tailwind CSS</span> · <span className="text-cyan-500">Framer Motion</span>
+                        Built with <span className="text-[rgb(var(--theme-primary-500))]">React</span> · <span className="text-[rgb(var(--theme-secondary-500))]">Tailwind CSS</span> · <span className="text-[rgb(var(--theme-primary-400))]">Framer Motion</span>
                     </p>
 
                     {/* Back to top */}

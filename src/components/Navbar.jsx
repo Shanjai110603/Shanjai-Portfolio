@@ -4,7 +4,10 @@ import { Menu, X, Github, Linkedin, Settings, Code2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '../lib/constants';
 
-const Navbar = () => {
+const Navbar = ({ siteInfo }) => {
+    const brandName = siteInfo?.siteName || SITE.name;
+    const githubLink = siteInfo?.siteGithub || SITE.github;
+    const linkedinLink = siteInfo?.siteLinkedin || SITE.linkedin;
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
@@ -57,8 +60,8 @@ const Navbar = () => {
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-500">
                         <Code2 size={14} className="text-white" />
                     </div>
-                    <span className="text-xl font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                        Shanjai S
+                    <span className="text-xl font-black bg-gradient-to-br from-[rgb(var(--theme-primary-400))] to-[rgb(var(--theme-secondary-400))] bg-clip-text text-transparent">
+                        {brandName}
                     </span>
                 </button>
 
@@ -82,14 +85,13 @@ const Navbar = () => {
                     ))}
                 </div>
 
-                {/* Right icons */}
                 <div className="hidden md:flex items-center gap-2">
-                    <a href={SITE.github} target="_blank" rel="noopener noreferrer"
+                    <a href={githubLink} target="_blank" rel="noopener noreferrer"
                         className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
                         <Github size={15} />
                     </a>
-                    <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"
-                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-white/10 hover:border-white/15 transition-all">
+                    <a href={linkedinLink} target="_blank" rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-[rgb(var(--theme-secondary-400))] hover:bg-white/10 hover:border-white/15 transition-all">
                         <Linkedin size={15} />
                     </a>
                 </div>
@@ -127,12 +129,12 @@ const Navbar = () => {
                             </button>
                         ))}
                         <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-2">
-                            <a href={SITE.github} target="_blank" rel="noopener noreferrer"
+                            <a href={githubLink} target="_blank" rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
                                 <Github size={18} />
                             </a>
-                            <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors">
+                            <a href={linkedinLink} target="_blank" rel="noopener noreferrer"
+                                className="w-10 h-10 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-gray-400 hover:text-[rgb(var(--theme-secondary-400))] transition-colors">
                                 <Linkedin size={18} />
                             </a>
                         </div>

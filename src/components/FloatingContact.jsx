@@ -3,13 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Mail, Linkedin, Github, X } from 'lucide-react';
 import { SITE } from '../lib/constants';
 
-const menuItems = [
-    { icon: Mail, href: `mailto:${SITE.email}`, label: 'Email', color: 'bg-red-500' },
-    { icon: Linkedin, href: SITE.linkedin, label: 'LinkedIn', color: 'bg-blue-600' },
-    { icon: Github, href: SITE.github, label: 'GitHub', color: 'bg-gray-800' },
-];
+const FloatingContact = ({ siteInfo }) => {
+    const email = siteInfo?.siteEmail || SITE.email;
+    const linkedin = siteInfo?.siteLinkedin || SITE.linkedin;
+    const github = siteInfo?.siteGithub || SITE.github;
 
-const FloatingContact = () => {
+    const menuItems = [
+        { icon: Mail, href: `mailto:${email}`, label: 'Email', color: 'bg-red-500' },
+        { icon: Linkedin, href: linkedin, label: 'LinkedIn', color: 'bg-blue-600' },
+        { icon: Github, href: github, label: 'GitHub', color: 'bg-gray-800' },
+    ];
     const [isOpen, setIsOpen] = useState(false);
 
     return (
