@@ -4,15 +4,34 @@ import { supabase } from './supabase';
  * Fetch portfolio data — reads localStorage first (instant), then validates against Supabase if table exists.
  * Falls back gracefully when Supabase table is not set up.
  */
+const isEmpty = (val) => {
+    if (!val) return true;
+    if (Array.isArray(val) && val.length === 0) return true;
+    if (typeof val === 'object' && Object.keys(val).length === 0) return true;
+    return false;
+};
+
 export const fetchPortfolioData = async (id, defaultData = {}) => {
     // 1. Try localStorage first — always works, instant
     try {
         const local = localStorage.getItem(id);
         if (local) {
-            const parsed = JSON.parse(local);
+            let parsed = JSON.parse(local);
+            const localIsEmpty = isEmpty(parsed);
+            if (localIsEmpty) {
+                parsed = defaultData;
+            }
+
             // Background-sync from Supabase (non-blocking)
             syncFromSupabase(id, defaultData).then(remote => {
-                if (remote) localStorage.setItem(id, JSON.stringify(remote));
+                const remoteIsEmpty = isEmpty(remote);
+                if (remoteIsEmpty && !localIsEmpty) {
+                    // Push local data to Supabase to initialize it!
+                    savePortfolioData(id, parsed);
+                } else if (!remoteIsEmpty) {
+                    // Update localStorage with remote data
+                    localStorage.setItem(id, JSON.stringify(remote));
+                }
             });
             return parsed;
         }
@@ -20,11 +39,16 @@ export const fetchPortfolioData = async (id, defaultData = {}) => {
 
     // 2. Try Supabase if nothing in localStorage
     const remote = await syncFromSupabase(id, defaultData);
-    if (remote) {
+    if (!isEmpty(remote)) {
         localStorage.setItem(id, JSON.stringify(remote));
         return remote;
     }
 
+    // Fallback to defaultData and auto-initialize Supabase
+    try {
+        localStorage.setItem(id, JSON.stringify(defaultData));
+        savePortfolioData(id, defaultData);
+    } catch {}
     return defaultData;
 };
 
