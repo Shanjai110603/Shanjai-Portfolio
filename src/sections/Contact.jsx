@@ -1,8 +1,8 @@
-
-import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Send, CheckCircle2, MapPin, Mail, AlertCircle } from 'lucide-react';
 import { SITE, STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData, savePortfolioData } from '../lib/api';
 
 export const MESSAGES_KEY = STORAGE_KEYS.messages;
 
@@ -16,7 +16,7 @@ const Contact = () => {
 
     const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
             setError('Please fill in all required fields.');
@@ -29,18 +29,21 @@ const Contact = () => {
         setError('');
         setLoading(true);
 
-        setTimeout(() => {
-            try {
-                const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
-                messages.unshift({ ...form, id: Date.now(), date: new Date().toISOString(), read: false });
-                localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
-            } catch (err) {
-                console.warn('Could not save message to localStorage:', err);
-            }
+        try {
+            const messages = await fetchPortfolioData(MESSAGES_KEY, []);
+            const updated = [
+                { ...form, id: Date.now(), date: new Date().toISOString(), read: false },
+                ...messages
+            ];
+            await savePortfolioData(MESSAGES_KEY, updated);
             setForm({ name: '', email: '', subject: '', message: '' });
-            setLoading(false);
             setSent(true);
-        }, 900);
+        } catch (err) {
+            console.warn('Could not save message:', err);
+            setError('Failed to send message. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -49,7 +52,7 @@ const Contact = () => {
 
             {/* Background glows */}
             <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-64 -z-10 opacity-20"
-                style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.3), transparent)', filter: 'blur(60px)' }} />
+                style={{ background: 'radial-gradient(ellipse, rgba(var(--theme-primary-500), 0.3), transparent)', filter: 'blur(60px)' }} />
 
             <div className="container mx-auto px-6">
                 <motion.div
@@ -59,14 +62,14 @@ const Contact = () => {
                     viewport={{ once: true }}
                     className="text-center mb-20"
                 >
-                    <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">Let's Talk</p>
+                    <p className="text-[rgb(var(--theme-primary-400))] text-sm font-semibold uppercase tracking-widest mb-3">Let's Talk</p>
                     <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
                         Get In{' '}
-                        <span className="bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-br from-[rgb(var(--theme-primary-400))] to-[rgb(var(--theme-secondary-400))] bg-clip-text text-transparent">
                             Touch
                         </span>
                     </h2>
-                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
+                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-[rgb(var(--theme-primary-500))] to-[rgb(var(--theme-secondary-500))]" />
                     <p className="text-gray-400 mt-5 max-w-lg mx-auto text-base">
                         Have a project in mind or want to collaborate? I'd love to hear from you.
                     </p>
@@ -93,13 +96,13 @@ const Contact = () => {
                             { icon: MapPin, label: 'Location', value: SITE.location, href: null },
                         ].map(({ icon: Icon, label, value, href }) => (
                             <div key={label} className="flex items-start gap-4 p-4 rounded-xl bg-white/3 border border-white/8 hover:border-white/15 transition-all group">
-                                <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-[rgba(var(--theme-primary-500),0.1)] border border-[rgba(var(--theme-primary-500),0.2)] flex items-center justify-center text-[rgb(var(--theme-primary-400))] shrink-0">
                                     <Icon size={17} />
                                 </div>
                                 <div>
                                     <p className="text-gray-600 text-xs uppercase tracking-wider mb-0.5">{label}</p>
                                     {href ? (
-                                        <a href={href} className="text-gray-300 text-sm font-medium hover:text-purple-400 transition-colors break-all">{value}</a>
+                                        <a href={href} className="text-gray-300 text-sm font-medium hover:text-[rgb(var(--theme-primary-400))] transition-colors break-all">{value}</a>
                                     ) : (
                                         <p className="text-gray-300 text-sm font-medium">{value}</p>
                                     )}
@@ -152,7 +155,7 @@ const Contact = () => {
                                                 value={form[field.name]}
                                                 onChange={handleChange}
                                                 placeholder={field.placeholder}
-                                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all"
+                                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[rgba(var(--theme-primary-500),0.5)] focus:bg-white/8 transition-all"
                                             />
                                         </div>
                                     ))}
@@ -164,7 +167,7 @@ const Contact = () => {
                                     value={form.subject}
                                     onChange={handleChange}
                                     placeholder="Subject"
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[rgba(var(--theme-primary-500),0.5)] focus:bg-white/8 transition-all"
                                 />
 
                                 <textarea
@@ -173,7 +176,7 @@ const Contact = () => {
                                     onChange={handleChange}
                                     placeholder="Your message *"
                                     rows={5}
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all resize-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[rgba(var(--theme-primary-500),0.5)] focus:bg-white/8 transition-all resize-none"
                                 />
 
                                 {error && (
@@ -185,8 +188,8 @@ const Contact = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] disabled:opacity-60 disabled:cursor-not-allowed"
-                                    style={{ background: 'linear-gradient(135deg,#8b5cf6,#06b6d4)' }}
+                                    className="w-full cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(var(--theme-primary-500),0.4)] disabled:opacity-60 disabled:cursor-not-allowed"
+                                    style={{ background: 'linear-gradient(135deg, rgb(var(--theme-primary-500)), rgb(var(--theme-secondary-500)))' }}
                                 >
                                     {loading ? (
                                         <>

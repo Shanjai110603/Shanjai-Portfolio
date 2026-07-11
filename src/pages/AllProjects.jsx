@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowLeft } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
@@ -6,21 +7,27 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ScrollToTop from '../components/ScrollToTop';
 import { PROJECTS_KEY, defaultProjects } from '../sections/Projects';
-import { useEffect } from 'react';
-
-const getProjects = () => {
-    try {
-        const stored = localStorage.getItem(PROJECTS_KEY);
-        return stored ? JSON.parse(stored) : defaultProjects;
-    } catch { return defaultProjects; }
-};
+import { fetchPortfolioData } from '../lib/api';
 
 const AllProjects = () => {
-    const projects = getProjects();
+    const [projects, setProjects] = useState(() => {
+        try {
+            const stored = localStorage.getItem(PROJECTS_KEY);
+            return stored ? JSON.parse(stored) : defaultProjects;
+        } catch {
+            return defaultProjects;
+        }
+    });
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchPortfolioData(PROJECTS_KEY, defaultProjects).then(res => {
+            if (res) {
+                setProjects(res);
+            }
+        });
     }, []);
+
 
     return (
         <div className="min-h-screen bg-gray-950 text-white font-sans selection:bg-cyan-500 selection:text-white flex flex-col">

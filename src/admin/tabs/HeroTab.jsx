@@ -1,24 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X } from 'lucide-react';
 import { HERO_KEY, defaultHeroData } from '../../sections/Hero';
-
-const getHeroData = () => {
-    try {
-        const stored = localStorage.getItem(HERO_KEY);
-        return stored ? JSON.parse(stored) : defaultHeroData;
-    } catch { return defaultHeroData; }
-};
-
-const saveHeroData = (data) => localStorage.setItem(HERO_KEY, JSON.stringify(data));
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const HeroTab = () => {
-    const [data, setData] = useState(getHeroData());
+    const [data, setData] = useState(defaultHeroData);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [newRole, setNewRole] = useState('');
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(HERO_KEY, defaultHeroData).then(res => {
+            setData(res || defaultHeroData);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setData(updated);
-        saveHeroData(updated);
+        await savePortfolioData(HERO_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -45,6 +45,8 @@ const HeroTab = () => {
             commit(defaultHeroData);
         }
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading hero settings...</div>;
 
     return (
         <div className="space-y-6">

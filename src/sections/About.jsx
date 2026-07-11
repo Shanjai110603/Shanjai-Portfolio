@@ -1,7 +1,8 @@
-
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Cpu, Globe, Rocket, MapPin, Mail, ExternalLink, Zap, Star, Shield, Database, Layout } from 'lucide-react';
 import { STORAGE_KEYS, SITE } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 
 export const ICON_MAP = { Code2, Cpu, Globe, Rocket, MapPin, Mail, ExternalLink, Zap, Star, Shield, Database, Layout };
 
@@ -24,22 +25,32 @@ export const ABOUT_KEY = STORAGE_KEYS.about;
 
 const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
 
-const getAboutData = () => {
-    try {
-        const stored = localStorage.getItem(ABOUT_KEY);
-        if (!stored) return defaultAboutData;
-        const parsed = JSON.parse(stored);
-        // Strip any old HTML from bios
-        if (parsed.bioP1) parsed.bioP1 = stripHtml(parsed.bioP1);
-        if (parsed.bioP2) parsed.bioP2 = stripHtml(parsed.bioP2);
-        return { ...defaultAboutData, ...parsed };
-    } catch { return defaultAboutData; }
-};
-
 export { defaultAboutData };
 
 const About = () => {
-    const data = getAboutData();
+    const [data, setData] = useState(() => {
+        try {
+            const stored = localStorage.getItem(ABOUT_KEY);
+            if (!stored) return defaultAboutData;
+            const parsed = JSON.parse(stored);
+            if (parsed.bioP1) parsed.bioP1 = stripHtml(parsed.bioP1);
+            if (parsed.bioP2) parsed.bioP2 = stripHtml(parsed.bioP2);
+            return { ...defaultAboutData, ...parsed };
+        } catch {
+            return defaultAboutData;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(ABOUT_KEY, defaultAboutData).then(res => {
+            if (res) {
+                if (res.bioP1) res.bioP1 = stripHtml(res.bioP1);
+                if (res.bioP2) res.bioP2 = stripHtml(res.bioP2);
+                setData({ ...defaultAboutData, ...res });
+            }
+        });
+    }, []);
+
     return (
         <section id="about" className="py-28 relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
@@ -77,7 +88,7 @@ const About = () => {
                             { icon: Mail, text: data.email },
                         ].map(({ icon: Icon, text }) => (
                             <span key={text} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 text-sm">
-                                <Icon size={13} className="text-blue-400" />{text}
+                                <Icon size={13} className="text-[rgb(var(--theme-primary-400))]" />{text}
                             </span>
                         ))}
                     </div>
@@ -90,7 +101,7 @@ const About = () => {
                     {/* Key  traits */}
                     <div className="flex flex-wrap gap-2 pt-2">
                         {data.techTags.map(tag => (
-                            <span key={tag} className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/8 border border-blue-500/20 text-blue-300">
+                            <span key={tag} className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[rgba(var(--theme-primary-500),0.08)] border border-[rgba(var(--theme-primary-500),0.2)] text-[rgb(var(--theme-primary-300))]">
                                 {tag}
                             </span>
                         ))}
@@ -99,7 +110,7 @@ const About = () => {
                     <div className="pt-2 flex gap-3 flex-wrap">
                         <button
                             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] bg-gradient-to-br from-blue-500 to-cyan-500"
+                            className="inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors duration-200 hover:shadow-[0_0_20px_rgba(var(--theme-primary-500),0.4)] bg-gradient-to-br from-[rgb(var(--theme-primary-500))] to-[rgb(var(--theme-secondary-500))]"
                         >
                             Let's Connect
                         </button>
@@ -131,7 +142,7 @@ const About = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.4, delay: i * 0.08 }}
                                 viewport={{ once: true }}
-                                className={`p-5 rounded-2xl bg-gradient-to-br border backdrop-blur-sm cursor-pointer hover:border-blue-400/30 transition-colors duration-200 ${bg} ${border}`}
+                                className={`p-5 rounded-2xl bg-gradient-to-br border backdrop-blur-sm cursor-pointer hover:border-[rgba(var(--theme-primary-400),0.3)] transition-colors duration-200 ${bg} ${border}`}
                             >
                                 <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 ${color}`}>
                                     <Icon size={20} />

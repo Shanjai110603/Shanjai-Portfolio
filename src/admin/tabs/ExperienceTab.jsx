@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X, Trash2, Edit2, GripVertical } from 'lucide-react';
 import { EXP_KEY, defaultExperiences } from '../../sections/Experience';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const COLOR_OPTIONS = [
     { value: 'blue', label: 'Blue' },
@@ -9,14 +10,6 @@ const COLOR_OPTIONS = [
     { value: 'emerald', label: 'Emerald' }
 ];
 
-const getExperienceData = () => {
-    try {
-        const stored = localStorage.getItem(EXP_KEY);
-        return stored ? JSON.parse(stored) : defaultExperiences;
-    } catch { return defaultExperiences; }
-};
-
-const saveExperienceData = (data) => localStorage.setItem(EXP_KEY, JSON.stringify(data));
 
 const ExperienceForm = ({ item = null, onSave, onCancel }) => {
     const [form, setForm] = useState(item || {
@@ -111,13 +104,21 @@ const ExperienceForm = ({ item = null, onSave, onCancel }) => {
 };
 
 const ExperienceTab = () => {
-    const [experiences, setExperiences] = useState(getExperienceData());
+    const [experiences, setExperiences] = useState(defaultExperiences);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [editingId, setEditingId] = useState(null); // 'new' or experience.id
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(EXP_KEY, defaultExperiences).then(res => {
+            setExperiences(res || defaultExperiences);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setExperiences(updated);
-        saveExperienceData(updated);
+        await savePortfolioData(EXP_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -160,6 +161,8 @@ const ExperienceTab = () => {
         newExp[idx] = temp;
         commit(newExp);
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading experience settings...</div>;
 
     return (
         <div className="space-y-6 max-w-4xl">

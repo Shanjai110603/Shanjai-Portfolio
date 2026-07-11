@@ -1,4 +1,4 @@
-
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap, Award, BookOpen, ExternalLink } from 'lucide-react';
 
@@ -38,17 +38,27 @@ export const defaultEducation = {
 };
 
 import { STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 export const EDU_KEY = STORAGE_KEYS.education;
 
-const getEducationData = () => {
-    try {
-        const stored = localStorage.getItem(EDU_KEY);
-        return stored ? JSON.parse(stored) : defaultEducation;
-    } catch { return defaultEducation; }
-};
-
 const Education = () => {
-    const data = getEducationData();
+    const [data, setData] = useState(() => {
+        try {
+            const stored = localStorage.getItem(EDU_KEY);
+            return stored ? JSON.parse(stored) : defaultEducation;
+        } catch {
+            return defaultEducation;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(EDU_KEY, defaultEducation).then(res => {
+            if (res) {
+                setData(res);
+            }
+        });
+    }, []);
+
     const { education, certifications, quote } = data;
     
     return (

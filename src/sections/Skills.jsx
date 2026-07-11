@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 import { STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 export const SKILLS_KEY = STORAGE_KEYS.skills;
 
 export const defaultSkillsData = [
@@ -52,12 +53,6 @@ export const defaultSkillsData = [
     },
 ];
 
-const getSkills = () => {
-    try {
-        const stored = localStorage.getItem(SKILLS_KEY);
-        return stored ? JSON.parse(stored) : defaultSkillsData;
-    } catch { return defaultSkillsData; }
-};
 
 export const THEME_MAP = {
     blue: {
@@ -125,7 +120,23 @@ const FloatingSkills = ({ data }) => {
 };
 
 const Skills = () => {
-    const skillsData = getSkills();
+    const [skillsData, setSkillsData] = useState(() => {
+        try {
+            const stored = localStorage.getItem(SKILLS_KEY);
+            return stored ? JSON.parse(stored) : defaultSkillsData;
+        } catch {
+            return defaultSkillsData;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(SKILLS_KEY, defaultSkillsData).then(res => {
+            if (res) {
+                setSkillsData(res);
+            }
+        });
+    }, []);
+
 
     return (
         <section id="skills" className="py-28 relative overflow-hidden">

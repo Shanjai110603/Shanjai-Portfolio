@@ -1,4 +1,4 @@
-
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
@@ -22,42 +22,30 @@ const defaultHeroData = {
 };
 
 import { STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 
-export const HERO_KEY = STORAGE_KEYS.hero; // Re-export for backward-compat with admin tabs
+export const HERO_KEY = STORAGE_KEYS.hero;
 const MEDIA_KEY = STORAGE_KEYS.media;
 
 // Strip any HTML tags from old stored data
 const stripHtml = (str = '') => str.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
 
-const getHeroData = () => {
+const getMergedMedia = (heroData) => {
     try {
-        const stored = localStorage.getItem(HERO_KEY);
-        const parsed = stored ? JSON.parse(stored) : {};
-        // Migrate old `bioHtml` to `bioText` by stripping tags
-        if (parsed.bioHtml && !parsed.bioText) {
-            parsed.bioText = stripHtml(parsed.bioHtml);
-            delete parsed.bioHtml;
-        }
-        const heroData = { ...defaultHeroData, ...parsed };
-
-        // Merge in active media URLs
-        try {
-            const mediaStored = localStorage.getItem(MEDIA_KEY);
-            if (mediaStored) {
-                const media = JSON.parse(mediaStored);
-                if (media.images?.length > 0) {
-                    const idx = media.activeImageIndex ?? 0;
-                    heroData._activeImageUrl = media.images[idx]?.url || null;
-                }
-                if (media.resumes?.length > 0) {
-                    const idx = media.activeResumeIndex ?? 0;
-                    heroData._activeCvUrl = media.resumes[idx]?.url || null;
-                }
+        const mediaStored = localStorage.getItem(MEDIA_KEY);
+        if (mediaStored) {
+            const media = JSON.parse(mediaStored);
+            if (media.images?.length > 0) {
+                const idx = media.activeImageIndex ?? 0;
+                heroData._activeImageUrl = media.images[idx]?.url || null;
             }
-        } catch {}
-
-        return heroData;
-    } catch { return defaultHeroData; }
+            if (media.resumes?.length > 0) {
+                const idx = media.activeResumeIndex ?? 0;
+                heroData._activeCvUrl = media.resumes[idx]?.url || null;
+            }
+        }
+    } catch {}
+    return heroData;
 };
 
 export { defaultHeroData };
@@ -84,7 +72,30 @@ const childVariants = {
 };
 
 const Hero = () => {
-    const data = getHeroData();
+    const [data, setData] = useState(() => {
+        try {
+            const stored = localStorage.getItem(HERO_KEY);
+            const parsed = stored ? JSON.parse(stored) : {};
+            if (parsed.bioHtml && !parsed.bioText) {
+                parsed.bioText = stripHtml(parsed.bioHtml);
+            }
+            return getMergedMedia({ ...defaultHeroData, ...parsed });
+        } catch {
+            return defaultHeroData;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(HERO_KEY, defaultHeroData).then(res => {
+            if (res) {
+                if (res.bioHtml && !res.bioText) {
+                    res.bioText = stripHtml(res.bioHtml);
+                }
+                setData(getMergedMedia({ ...defaultHeroData, ...res }));
+            }
+        });
+    }, []);
+
 
     const scrollTo = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -102,19 +113,19 @@ const Hero = () => {
                 animate={{ scale: [1, 1.3, 1], opacity: [0.15, 0.3, 0.15], x: [0, 30, 0] }}
                 transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
                 className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full -z-10"
-                style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.25), transparent 70%)', filter: 'blur(40px)' }}
+                style={{ background: 'radial-gradient(circle, rgba(var(--theme-primary-500), 0.25), transparent 70%)', filter: 'blur(40px)' }}
             />
             <motion.div
                 animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.25, 0.1], x: [0, -20, 0] }}
                 transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
                 className="absolute -bottom-40 -right-20 w-[700px] h-[700px] rounded-full -z-10"
-                style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.2), transparent 70%)', filter: 'blur(50px)' }}
+                style={{ background: 'radial-gradient(circle, rgba(var(--theme-secondary-500), 0.2), transparent 70%)', filter: 'blur(50px)' }}
             />
             <motion.div
                 animate={{ y: [0, -40, 0], opacity: [0.08, 0.18, 0.08] }}
                 transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                 className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full -z-10"
-                style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.15), transparent 70%)', filter: 'blur(40px)' }}
+                style={{ background: 'radial-gradient(circle, rgba(var(--theme-primary-500), 0.15), transparent 70%)', filter: 'blur(40px)' }}
             />
 
             {/* Subtle grid */}
@@ -165,7 +176,7 @@ const Hero = () => {
                                 </span>
                                 <span className="flex">
                                     {(data.nameLast || '').split('').map((char, i) => (
-                                        <motion.span key={`last-${i}`} variants={childVariants} className="bg-gradient-to-br from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent inline-block">
+                                        <motion.span key={`last-${i}`} variants={childVariants} className="bg-gradient-to-br from-[rgb(var(--theme-primary-400))] via-[rgb(var(--theme-secondary-400))] to-[rgb(var(--theme-primary-400))] bg-clip-text text-transparent inline-block">
                                             {char === ' ' ? '\u00A0' : char}
                                         </motion.span>
                                     ))}
@@ -180,7 +191,7 @@ const Hero = () => {
                             transition={{ delay: 0.5 }}
                             className="text-xl md:text-2xl text-gray-400 font-light mb-6 h-10"
                         >
-                            <span className="text-blue-400 font-medium">{'< '}</span>
+                            <span className="text-[rgb(var(--theme-primary-400))] font-medium">{'< '}</span>
                             <TypeAnimation
                                 sequence={data.roles.flatMap(role => [role, 1800])}
                                 wrapper="span"
@@ -188,7 +199,7 @@ const Hero = () => {
                                 repeat={Infinity}
                                 className="text-white font-semibold"
                             />
-                            <span className="text-blue-400 font-medium">{' />'}</span>
+                            <span className="text-[rgb(var(--theme-primary-400))] font-medium">{' />'}</span>
                         </motion.div>
 
                         {/* Bio */}
@@ -210,7 +221,7 @@ const Hero = () => {
                         >
                             <button
                                 onClick={() => scrollTo('projects')}
-                                className="group relative cursor-pointer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-colors duration-200 hover:shadow-[0_0_20px_rgba(var(--theme-secondary-500),0.4)] bg-gradient-to-br from-blue-500 to-cyan-600"
+                                className="group relative cursor-pointer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-colors duration-200 hover:shadow-[0_0_20px_rgba(var(--theme-primary-500),0.4)] bg-gradient-to-br from-[rgb(var(--theme-primary-500))] to-[rgb(var(--theme-secondary-600))]"
                             >
                                 <Sparkles size={16} className="group-hover:rotate-12 transition-transform duration-200" />
                                 View My Work
@@ -301,7 +312,7 @@ const Hero = () => {
                                     animate={{ y: [-5, 5, -5] }}
                                     transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
                                     className="absolute -top-4 -right-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
-                                    style={{ background: 'rgba(59,130,246,0.15)', borderColor: 'rgba(59,130,246,0.4)', color: '#93c5fd' }}
+                                    style={{ background: 'rgba(var(--theme-primary-500), 0.15)', borderColor: 'rgba(var(--theme-primary-500), 0.4)', color: 'rgb(var(--theme-primary-300))' }}
                                 >
                                     {data.badgeTopRight}
                                 </motion.div>
@@ -311,7 +322,7 @@ const Hero = () => {
                                     animate={{ y: [5, -5, 5] }}
                                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                                     className="absolute -bottom-4 -left-4 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-sm"
-                                    style={{ background: 'rgba(139,92,246,0.15)', borderColor: 'rgba(139,92,246,0.4)', color: '#c4b5fd' }}
+                                    style={{ background: 'rgba(var(--theme-secondary-500), 0.15)', borderColor: 'rgba(var(--theme-secondary-500), 0.4)', color: 'rgb(var(--theme-secondary-300))' }}
                                 >
                                     {data.badgeBottomLeft}
                                 </motion.div>
@@ -334,7 +345,7 @@ const Hero = () => {
                         transition={{ duration: 1.5, repeat: Infinity }}
                         className="w-5 h-8 rounded-full border border-gray-700 flex items-start justify-center p-1"
                     >
-                        <div className="w-1 h-2 bg-gradient-to-b from-blue-400 to-purple-500 rounded-full" />
+                        <div className="w-1 h-2 bg-gradient-to-b from-[rgb(var(--theme-primary-400))] to-[rgb(var(--theme-secondary-500))] rounded-full" />
                     </motion.div>
                 </motion.div>
             </div>

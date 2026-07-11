@@ -16,21 +16,51 @@ const AdminLogin = ({ onLogin }) => {
         setLoading(true);
         setError('');
 
-        const { error: authError } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
+        let loginSuccess = false;
+        let sessionObject = null;
 
-        if (authError) {
-            setError(authError.message || 'Invalid login credentials');
+        try {
+            const { data, error: authError } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (!authError && data?.session) {
+                loginSuccess = true;
+                sessionObject = data.session;
+            }
+        } catch (err) {
+            console.warn('Supabase authentication failed or was unreachable:', err);
+        }
+
+        // Try local fallback if Supabase didn't succeed
+        if (!loginSuccess) {
+            const fallbackEmail = import.meta.env.VITE_ADMIN_EMAIL || 'admin@example.com';
+            const fallbackPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+
+            if (email === fallbackEmail && password === fallbackPassword) {
+                const mockSession = {
+                    user: { email: fallbackEmail },
+                    isLocal: true,
+                    expires_at: Math.floor(Date.now() / 1000) + 3600
+                };
+                sessionStorage.setItem('portfolio_local_session', JSON.stringify(mockSession));
+                sessionObject = mockSession;
+                loginSuccess = true;
+            }
+        }
+
+        if (loginSuccess) {
+            if (onLogin) onLogin(sessionObject);
+        } else {
+            setError('Invalid login credentials');
             setShaking(true);
             setTimeout(() => setShaking(false), 600);
             setPassword('');
-        } else {
-            if (onLogin) onLogin();
         }
         setLoading(false);
     };
+
 
     return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center relative overflow-hidden">

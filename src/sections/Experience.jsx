@@ -1,7 +1,8 @@
-
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 
 export const defaultExperiences = [
     {
@@ -21,13 +22,6 @@ export const defaultExperiences = [
 ];
 
 export const EXP_KEY = STORAGE_KEYS.experience;
-
-const getExperienceData = () => {
-    try {
-        const stored = localStorage.getItem(EXP_KEY);
-        return stored ? JSON.parse(stored) : defaultExperiences;
-    } catch { return defaultExperiences; }
-};
 
 const colorMap = {
     blue: {
@@ -61,7 +55,22 @@ const colorMap = {
 };
 
 const Experience = () => {
-    const experiences = getExperienceData();
+    const [experiences, setExperiences] = useState(() => {
+        try {
+            const stored = localStorage.getItem(EXP_KEY);
+            return stored ? JSON.parse(stored) : defaultExperiences;
+        } catch {
+            return defaultExperiences;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(EXP_KEY, defaultExperiences).then(res => {
+            if (res) {
+                setExperiences(res);
+            }
+        });
+    }, []);
     
     return (
     <section id="experience" className="py-28 relative">

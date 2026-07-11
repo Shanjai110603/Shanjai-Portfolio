@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X, Trash2, Edit2 } from 'lucide-react';
 import { ABOUT_KEY, defaultAboutData, ICON_MAP } from '../../sections/About';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const GRADIENT_OPTIONS = [
     { label: 'Blue', bg: 'from-blue-500/10 to-blue-600/5', color: 'text-blue-400', border: 'border-blue-500/20' },
@@ -10,14 +11,6 @@ const GRADIENT_OPTIONS = [
     { label: 'Orange', bg: 'from-orange-500/10 to-orange-600/5', color: 'text-orange-400', border: 'border-orange-500/20' },
 ];
 
-const getAboutData = () => {
-    try {
-        const stored = localStorage.getItem(ABOUT_KEY);
-        return stored ? JSON.parse(stored) : defaultAboutData;
-    } catch { return defaultAboutData; }
-};
-
-const saveAboutData = (data) => localStorage.setItem(ABOUT_KEY, JSON.stringify(data));
 
 const HighlightForm = ({ item = null, onSave, onCancel }) => {
     const [form, setForm] = useState(item || {
@@ -72,14 +65,22 @@ const HighlightForm = ({ item = null, onSave, onCancel }) => {
 };
 
 const AboutTab = () => {
-    const [data, setData] = useState(getAboutData());
+    const [data, setData] = useState(defaultAboutData);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [newTag, setNewTag] = useState('');
     const [editingHighlight, setEditingHighlight] = useState(null); // null, 'new', or index
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(ABOUT_KEY, defaultAboutData).then(res => {
+            setData(res || defaultAboutData);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setData(updated);
-        saveAboutData(updated);
+        await savePortfolioData(ABOUT_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -123,6 +124,8 @@ const AboutTab = () => {
             commit(defaultAboutData);
         }
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading about settings...</div>;
 
     return (
         <div className="space-y-6">

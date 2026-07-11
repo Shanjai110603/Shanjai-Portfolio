@@ -9,8 +9,6 @@ import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
 import LoadingScreen from './components/LoadingScreen';
 import AnimatedBackground from './components/AnimatedBackground';
-import CustomCursor from './components/CustomCursor';
-import CursorTrail from './components/CursorTrail';
 import ScrollProgressBar from './components/ScrollProgressBar';
 import HireMeCTA from './components/HireMeCTA';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -75,8 +73,6 @@ const Portfolio = () => {
   return (
     <div className={themeClass}>
       <ScrollProgressBar />
-      <CustomCursor />
-      <CursorTrail />
       {globalSettings.enableAnimatedBackground && <AnimatedBackground />}
       <Navbar />
       <main className="relative z-10">

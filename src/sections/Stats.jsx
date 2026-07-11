@@ -1,9 +1,9 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Coffee, Layers, Clock } from 'lucide-react';
 
 import { STORAGE_KEYS } from '../lib/constants';
+import { fetchPortfolioData } from '../lib/api';
 export const STATS_KEY = STORAGE_KEYS.stats;
 
 export const defaultStats = [
@@ -13,12 +13,6 @@ export const defaultStats = [
     { id: 4, icon: 'Coffee', label: 'Cups of Coffee', value: 500, suffix: '+', color: 'text-amber-400', bg: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/15' },
 ];
 
-const getStatsData = () => {
-    try {
-        const stored = localStorage.getItem(STATS_KEY);
-        return stored ? JSON.parse(stored) : defaultStats;
-    } catch { return defaultStats; }
-};
 
 export const ICON_MAP = { Code2, Coffee, Layers, Clock };
 
@@ -79,7 +73,23 @@ const StatCard = ({ icon: Icon, label, value, suffix, color, bg, border, delay }
 };
 
 const Stats = () => {
-    const stats = getStatsData();
+    const [stats, setStats] = useState(() => {
+        try {
+            const stored = localStorage.getItem(STATS_KEY);
+            return stored ? JSON.parse(stored) : defaultStats;
+        } catch {
+            return defaultStats;
+        }
+    });
+
+    useEffect(() => {
+        fetchPortfolioData(STATS_KEY, defaultStats).then(res => {
+            if (res) {
+                setStats(res);
+            }
+        });
+    }, []);
+
 
     return (
         <section className="py-20 relative">

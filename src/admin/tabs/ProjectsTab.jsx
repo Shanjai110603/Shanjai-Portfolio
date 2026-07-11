@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, Save, Edit2, X, Check, Star, DownloadCloud } from 'lucide-react';
 import { PROJECTS_KEY, defaultProjects } from '../../sections/Projects';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const GRADIENT_OPTIONS = [
     { label: 'Cyan → Blue', value: 'from-cyan-500 to-blue-600' },
@@ -22,14 +23,6 @@ const emptyProject = () => ({
     featured: false
 });
 
-const getProjects = () => {
-    try {
-        const stored = localStorage.getItem(PROJECTS_KEY);
-        return stored ? JSON.parse(stored) : defaultProjects;
-    } catch { return defaultProjects; }
-};
-
-const save = (projects) => localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
 
 const ProjectForm = ({ project, onSave, onCancel }) => {
     const [form, setForm] = useState({ ...project });
@@ -119,13 +112,21 @@ const ProjectForm = ({ project, onSave, onCancel }) => {
 };
 
 const ProjectsTab = () => {
-    const [projects, setProjects] = useState(getProjects());
+    const [projects, setProjects] = useState(defaultProjects);
+    const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(null); // null | 'new' | project id
     const [saved, setSaved] = useState(false);
 
-    const commit = (updated) => {
-        save(updated);
+    useEffect(() => {
+        fetchPortfolioData(PROJECTS_KEY, defaultProjects).then(res => {
+            setProjects(res || defaultProjects);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setProjects(updated);
+        await savePortfolioData(PROJECTS_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -180,12 +181,14 @@ const ProjectsTab = () => {
         }
     };
 
-    const handleReset = () => {
+    const handleReset = async () => {
         if (confirm('Reset to default projects?')) {
-            save(defaultProjects);
             setProjects(defaultProjects);
+            await savePortfolioData(PROJECTS_KEY, defaultProjects);
         }
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading projects settings...</div>;
 
     return (
         <div>

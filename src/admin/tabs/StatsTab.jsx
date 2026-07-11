@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X, Trash2, Edit2, GripVertical, Activity } from 'lucide-react';
 import { STATS_KEY, defaultStats, ICON_MAP } from '../../sections/Stats';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const COLOR_OPTIONS = [
     { value: 'blue', label: 'Blue', color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/15' },
@@ -11,14 +12,6 @@ const COLOR_OPTIONS = [
     { value: 'rose', label: 'Rose', color: 'text-rose-400', bg: 'from-rose-500/10 to-rose-600/5', border: 'border-rose-500/15' },
 ];
 
-const getStatsData = () => {
-    try {
-        const stored = localStorage.getItem(STATS_KEY);
-        return stored ? JSON.parse(stored) : defaultStats;
-    } catch { return defaultStats; }
-};
-
-const saveStatsData = (data) => localStorage.setItem(STATS_KEY, JSON.stringify(data));
 
 const StatForm = ({ item = null, onSave, onCancel }) => {
     const [form, setForm] = useState(item || {
@@ -82,13 +75,21 @@ const StatForm = ({ item = null, onSave, onCancel }) => {
 };
 
 const StatsTab = () => {
-    const [stats, setStats] = useState(getStatsData());
+    const [stats, setStats] = useState(defaultStats);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [editingId, setEditingId] = useState(null);
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(STATS_KEY, defaultStats).then(res => {
+            setStats(res || defaultStats);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setStats(updated);
-        saveStatsData(updated);
+        await savePortfolioData(STATS_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -115,6 +116,8 @@ const StatsTab = () => {
         [newArr[idx], newArr[swapIdx]] = [newArr[swapIdx], newArr[idx]];
         commit(newArr);
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading stats settings...</div>;
 
     return (
         <div className="space-y-6 max-w-4xl">

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X, Trash2, Edit2, GripVertical, Award, GraduationCap } from 'lucide-react';
 import { EDU_KEY, defaultEducation } from '../../sections/Education';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const CERT_COLORS = [
     { value: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20', label: 'Gold (Yellow)' },
@@ -10,14 +11,6 @@ const CERT_COLORS = [
     { value: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20', label: 'Cyan' },
 ];
 
-const getEducationData = () => {
-    try {
-        const stored = localStorage.getItem(EDU_KEY);
-        return stored ? JSON.parse(stored) : defaultEducation;
-    } catch { return defaultEducation; }
-};
-
-const saveEducationData = (data) => localStorage.setItem(EDU_KEY, JSON.stringify(data));
 
 const EduForm = ({ item = null, onSave, onCancel }) => {
     const [form, setForm] = useState(item || {
@@ -103,14 +96,22 @@ const CertForm = ({ item = null, onSave, onCancel }) => {
 
 
 const EducationTab = () => {
-    const [data, setData] = useState(getEducationData());
+    const [data, setData] = useState(defaultEducation);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [editingEduId, setEditingEduId] = useState(null);
     const [editingCertId, setEditingCertId] = useState(null);
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(EDU_KEY, defaultEducation).then(res => {
+            setData(res || defaultEducation);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setData(updated);
-        saveEducationData(updated);
+        await savePortfolioData(EDU_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -148,6 +149,8 @@ const EducationTab = () => {
         [newArr[idx], newArr[swapIdx]] = [newArr[swapIdx], newArr[idx]];
         commit({ ...data, certifications: newArr });
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading education settings...</div>;
 
     return (
         <div className="space-y-6 max-w-5xl">

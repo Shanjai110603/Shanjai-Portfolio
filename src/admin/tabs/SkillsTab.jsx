@@ -1,17 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check, Plus, X, Trash2, Edit2, GripVertical, Code2, Copy, MoveUp, MoveDown } from 'lucide-react';
 import { SKILLS_KEY, defaultSkillsData, THEME_MAP } from '../../sections/Skills';
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const COLOR_OPTIONS = Object.keys(THEME_MAP).map(k => ({ value: k, label: k.charAt(0).toUpperCase() + k.slice(1) }));
 
-const getSkillsData = () => {
-    try {
-        const stored = localStorage.getItem(SKILLS_KEY);
-        return stored ? JSON.parse(stored) : defaultSkillsData;
-    } catch { return defaultSkillsData; }
-};
-
-const saveSkillsData = (data) => localStorage.setItem(SKILLS_KEY, JSON.stringify(data));
 
 const SkillItemRow = ({ skill, onChange, onRemove, onMoveUp, onMoveDown, isFirst, isLast }) => {
     return (
@@ -120,13 +113,21 @@ const CategoryForm = ({ item = null, onSave, onCancel }) => {
 };
 
 const SkillsTab = () => {
-    const [data, setData] = useState(getSkillsData());
+    const [data, setData] = useState(defaultSkillsData);
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [editingId, setEditingId] = useState(null);
 
-    const commit = (updated) => {
+    useEffect(() => {
+        fetchPortfolioData(SKILLS_KEY, defaultSkillsData).then(res => {
+            setData(res || defaultSkillsData);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setData(updated);
-        saveSkillsData(updated);
+        await savePortfolioData(SKILLS_KEY, updated);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -158,6 +159,8 @@ const SkillsTab = () => {
         [newArr[idx], newArr[swapIdx]] = [newArr[swapIdx], newArr[idx]];
         commit(newArr);
     };
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading skills settings...</div>;
 
     return (
         <div className="space-y-6 max-w-5xl">

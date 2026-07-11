@@ -1,9 +1,9 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import { Link } from 'react-router-dom';
+import { fetchPortfolioData } from '../lib/api';
 
 const defaultProjects = [
     {
@@ -55,20 +55,29 @@ const defaultProjects = [
 import { STORAGE_KEYS } from '../lib/constants';
 export const PROJECTS_KEY = STORAGE_KEYS.projects;
 
-const getProjects = () => {
-    try {
-        const stored = localStorage.getItem(PROJECTS_KEY);
-        return stored ? JSON.parse(stored) : defaultProjects;
-    } catch { return defaultProjects; }
-};
-
 export { defaultProjects };
 
 const FILTER_TABS = ['All', 'Security', 'Python', 'Web', 'Automation'];
 
 const Projects = () => {
-    const allProjects = getProjects();
+    const [allProjects, setAllProjects] = useState(() => {
+        try {
+            const stored = localStorage.getItem(PROJECTS_KEY);
+            return stored ? JSON.parse(stored) : defaultProjects;
+        } catch {
+            return defaultProjects;
+        }
+    });
     const [activeFilter, setActiveFilter] = useState('All');
+
+    useEffect(() => {
+        fetchPortfolioData(PROJECTS_KEY, defaultProjects).then(res => {
+            if (res) {
+                setAllProjects(res);
+            }
+        });
+    }, []);
+
 
     const filtered = (activeFilter === 'All'
         ? allProjects.filter(p => p.featured)

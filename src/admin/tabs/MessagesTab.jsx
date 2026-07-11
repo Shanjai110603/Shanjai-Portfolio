@@ -1,20 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, Trash2, Eye, Check, Inbox } from 'lucide-react';
 import { MESSAGES_KEY } from '../../sections/Contact';
-
-const getMessages = () => {
-    try {
-        return JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
-    } catch { return []; }
-};
+import { fetchPortfolioData, savePortfolioData } from '../../lib/api';
 
 const MessagesTab = () => {
-    const [messages, setMessages] = useState(getMessages());
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState(null);
 
-    const commit = (updated) => {
-        localStorage.setItem(MESSAGES_KEY, JSON.stringify(updated));
+    useEffect(() => {
+        fetchPortfolioData(MESSAGES_KEY, []).then(res => {
+            setMessages(res || []);
+            setLoading(false);
+        });
+    }, []);
+
+    const commit = async (updated) => {
         setMessages(updated);
+        await savePortfolioData(MESSAGES_KEY, updated);
     };
 
     const markRead = (id) => {
@@ -41,6 +44,7 @@ const MessagesTab = () => {
         markRead(msg.id);
     };
 
+
     const formatDate = (iso) => {
         try {
             return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -48,6 +52,8 @@ const MessagesTab = () => {
     };
 
     const unread = messages.filter(m => !m.read).length;
+
+    if (loading) return <div className="text-gray-500 animate-pulse">Loading messages...</div>;
 
     if (messages.length === 0) {
         return (
