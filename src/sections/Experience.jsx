@@ -99,7 +99,7 @@ const Experience = () => {
                 <div className="relative">
                     <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/40 via-purple-500/20 to-transparent" />
 
-                    {experiences.map((exp, i) => {
+                    {(Array.isArray(experiences) ? experiences : []).map((exp, i) => {
                         const c = colorMap[exp.color] || colorMap.blue;
                         return (
                             <motion.div
@@ -141,7 +141,7 @@ const Experience = () => {
 
                                     {/* Points */}
                                     <ul className="space-y-2.5">
-                                        {exp.points.map((pt, idx) => (
+                                        {(Array.isArray(exp.points) ? exp.points : []).map((pt, idx) => (
                                             <li key={idx} className="flex gap-3 text-sm text-gray-300 leading-relaxed">
                                                 <ChevronRight size={14} className={`${c.icon} mt-0.5 shrink-0`} />
                                                 <span>{pt}</span>

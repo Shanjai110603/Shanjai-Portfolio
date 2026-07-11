@@ -59,7 +59,9 @@ const Education = () => {
         });
     }, []);
 
-    const { education, certifications, quote } = data;
+    const { education = [], certifications = [], quote = "" } = data || {};
+    const educationList = Array.isArray(education) ? education : [];
+    const certificationsList = Array.isArray(certifications) ? certifications : [];
     
     return (
     <section id="education" className="py-28 relative">
@@ -94,7 +96,7 @@ const Education = () => {
                     <div className="relative">
                         <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/40 to-transparent" />
                         <div className="space-y-6">
-                            {education.map((edu, i) => (
+                            {educationList.map((edu, i) => (
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, x: -20 }}
@@ -128,7 +130,7 @@ const Education = () => {
                         <Award size={20} className="text-emerald-400" /> Certifications
                     </h3>
                     <div className="space-y-4">
-                        {certifications.map((cert, i) => (
+                        {certificationsList.map((cert, i) => (
                             <motion.div
                                 key={i}
                                 initial={{ opacity: 0, x: 20 }}

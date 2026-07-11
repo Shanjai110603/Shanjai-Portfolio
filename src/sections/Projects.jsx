@@ -79,15 +79,17 @@ const Projects = () => {
     }, []);
 
 
+    const projectsList = Array.isArray(allProjects) ? allProjects : [];
     const filtered = (activeFilter === 'All'
-        ? allProjects.filter(p => p.featured)
-        : allProjects.filter(p =>
-            p.featured && (
+        ? projectsList.filter(p => p?.featured)
+        : projectsList.filter(p =>
+            p?.featured && (
                 p.tech?.some(t => t.toLowerCase().includes(activeFilter.toLowerCase())) ||
                 (p.highlight && p.highlight.toLowerCase().includes(activeFilter.toLowerCase()))
             )
         )
     ).slice(0, 4);
+
 
     return (
         <section id="projects" className="py-28 relative">

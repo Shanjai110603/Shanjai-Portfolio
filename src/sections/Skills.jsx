@@ -83,7 +83,8 @@ export const THEME_MAP = {
 
 const FloatingSkills = ({ data }) => {
     const allSkills = useMemo(() => {
-        const skills = data.flatMap(cat => cat.items.map(item => item.name));
+        if (!Array.isArray(data)) return [];
+        const skills = data.flatMap(cat => (cat?.items ? cat.items.map(item => item.name) : []));
         // Only use a small subset (max 12) of skills to avoid cluttering the background
         const expanded = [...skills].sort(() => 0.5 - Math.random()).slice(0, 12);
         
@@ -165,7 +166,7 @@ const Skills = () => {
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                    {skillsData.map((category, catIndex) => {
+                    {(Array.isArray(skillsData) ? skillsData : []).map((category, catIndex) => {
                         const theme = THEME_MAP[category.colorTheme] || THEME_MAP.blue;
                         
                         return (
@@ -185,7 +186,7 @@ const Skills = () => {
                                 </div>
 
                                 <div className="space-y-5">
-                                    {category.items.map((skill, idx) => (
+                                    {(category?.items || []).map((skill, idx) => (
                                         <div key={skill.id || idx}>
                                             <div className="flex justify-between mb-2">
                                                 <span className="text-gray-300 text-sm font-medium">{skill.name}</span>
