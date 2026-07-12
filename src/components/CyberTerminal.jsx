@@ -126,7 +126,7 @@ const CyberTerminal = () => {
             {/* Global floating HUD toggle button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-gray-900 border border-white/10 flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 hover:border-cyan-500/40 hover:scale-105 active:scale-95 shadow-xl transition-all"
+                className="fixed bottom-6 right-24 z-40 w-12 h-12 rounded-full bg-gray-900 border border-white/10 flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 hover:border-cyan-500/40 hover:scale-105 active:scale-95 shadow-xl transition-all"
                 title="Press Ctrl + ` to open shell"
             >
                 <TerminalIcon size={20} />

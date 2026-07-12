@@ -9,10 +9,11 @@ const SnakeGame = () => {
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(() => Number(localStorage.getItem('snake_highscore') || 0));
     const [gameState, setGameState] = useState('IDLE'); // IDLE, RUNNING, GAME_OVER
+    const [isMoving, setIsMoving] = useState(false);
     
     // Game constants
     const GRID_SIZE = 20;
-    const GAME_SPEED = 100; // ms
+    const GAME_SPEED = 110; // ms (slightly slower base speed for better UX responsiveness)
 
     const snakeRef = useRef([[10, 10]]);
     const dirRef = useRef([0, 0]); // [dx, dy]
@@ -31,33 +32,40 @@ const SnakeGame = () => {
             }
 
             const currentDir = dirRef.current;
+            let newDir = null;
             switch (e.key) {
                 case 'ArrowUp':
                 case 'w':
                 case 'W':
-                    if (currentDir[1] === 0) dirRef.current = [0, -1];
+                    if (currentDir[1] === 0) newDir = [0, -1];
                     e.preventDefault();
                     break;
                 case 'ArrowDown':
                 case 's':
                 case 'S':
-                    if (currentDir[1] === 0) dirRef.current = [0, 1];
+                    // Prevent immediate down-crash from initial stationary start
+                    if (currentDir[1] === 0 && !(currentDir[0] === 0 && currentDir[1] === 0)) newDir = [0, 1];
                     e.preventDefault();
                     break;
                 case 'ArrowLeft':
                 case 'a':
                 case 'A':
-                    if (currentDir[0] === 0) dirRef.current = [-1, 0];
+                    if (currentDir[0] === 0) newDir = [-1, 0];
                     e.preventDefault();
                     break;
                 case 'ArrowRight':
                 case 'd':
                 case 'D':
-                    if (currentDir[0] === 0) dirRef.current = [1, 0];
+                    if (currentDir[0] === 0) newDir = [1, 0];
                     e.preventDefault();
                     break;
                 default:
                     break;
+            }
+
+            if (newDir) {
+                dirRef.current = newDir;
+                setIsMoving(true);
             }
         };
 
@@ -71,10 +79,12 @@ const SnakeGame = () => {
             [10, 11],
             [10, 12]
         ];
-        dirRef.current = [0, -1]; // Go up initially
+        dirRef.current = [0, 0]; // Wait for user key to start moving
         setScore(0);
+        setIsMoving(false);
         setGameState('RUNNING');
         spawnFood();
+        setTimeout(() => draw(), 50);
     };
 
     const spawnFood = () => {
@@ -97,6 +107,11 @@ const SnakeGame = () => {
         if (gameState !== 'RUNNING') return;
 
         const interval = setInterval(() => {
+            if (dirRef.current[0] === 0 && dirRef.current[1] === 0) {
+                draw();
+                return;
+            }
+
             const snake = [...snakeRef.current];
             const head = snake[0];
             const dir = dirRef.current;
@@ -107,13 +122,13 @@ const SnakeGame = () => {
             const cols = gridCountRef.current.cols;
             const rows = gridCountRef.current.rows;
             if (nextHead[0] < 0 || nextHead[0] >= cols || nextHead[1] < 0 || nextHead[1] >= rows) {
-                endGame();
+                endGame('wall_collision');
                 return;
             }
 
             // Check collision with self
             if (snake.some(segment => segment[0] === nextHead[0] && segment[1] === nextHead[1])) {
-                endGame();
+                endGame('self_collision');
                 return;
             }
 
@@ -142,7 +157,7 @@ const SnakeGame = () => {
         return () => clearInterval(interval);
     }, [gameState, highScore]);
 
-    const endGame = () => {
+    const endGame = (reason) => {
         setGameState('GAME_OVER');
     };
 
@@ -218,8 +233,15 @@ const SnakeGame = () => {
     const triggerDir = (dx, dy) => {
         if (gameState !== 'RUNNING') return;
         const currentDir = dirRef.current;
-        if (dx !== 0 && currentDir[0] === 0) dirRef.current = [dx, 0];
-        if (dy !== 0 && currentDir[1] === 0) dirRef.current = [0, dy];
+        if (dx !== 0 && currentDir[0] === 0) {
+            dirRef.current = [dx, 0];
+            setIsMoving(true);
+        }
+        if (dy !== 0 && currentDir[1] === 0) {
+            if (dy === 1 && currentDir[0] === 0 && currentDir[1] === 0) return;
+            dirRef.current = [0, dy];
+            setIsMoving(true);
+        }
     };
 
     return (
@@ -243,6 +265,13 @@ const SnakeGame = () => {
                 />
 
                 {/* Overlays */}
+                {gameState === 'RUNNING' && !isMoving && (
+                    <div className="absolute inset-x-0 bottom-4 flex justify-center pointer-events-none z-25">
+                        <div className="px-3 py-1.5 rounded bg-black/75 border border-white/10 text-[10px] text-cyan-400 animate-pulse font-mono tracking-wider">
+                            PRESS ARROWS OR WASD TO START
+                        </div>
+                    </div>
+                )}
                 {gameState === 'IDLE' && (
                     <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-6 text-center">
                         <Gamepad2 size={40} className="text-[rgb(var(--theme-primary-400))] mb-4 animate-bounce" />
