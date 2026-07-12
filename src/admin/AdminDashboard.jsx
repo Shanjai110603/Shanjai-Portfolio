@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, FolderKanban, Zap, MessageSquare,
-    Settings, LogOut, Menu, X, Terminal, ChevronRight, Home, User, Briefcase, GraduationCap, Activity, Palette, Image
+    Settings, LogOut, Menu, X, Terminal, ChevronRight, Home, User, Briefcase, GraduationCap, Activity, Palette, Image, BookOpen
 } from 'lucide-react';
 import HeroTab from './tabs/HeroTab';
 import AboutTab from './tabs/AboutTab';
@@ -15,6 +15,7 @@ import MessagesTab from './tabs/MessagesTab';
 import SiteInfoTab from './tabs/SiteInfoTab';
 import ThemeTab from './tabs/ThemeTab';
 import MediaTab from './tabs/MediaTab';
+import BlogsTab from './tabs/BlogsTab';
 
 const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -25,6 +26,7 @@ const tabs = [
     { id: 'stats', label: 'Stats', icon: Activity },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'skills', label: 'Skills', icon: Zap },
+    { id: 'blogs', label: 'Blogs', icon: BookOpen },
     { id: 'media', label: 'Media', icon: Image },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
     { id: 'theme', label: 'Theme', icon: Palette },
@@ -41,9 +43,9 @@ const StatCard = ({ label, value, color }) => (
 const OverviewTab = ({ onNavigate }) => {
     const projects = JSON.parse(localStorage.getItem('portfolio_projects') || '[]');
     const messages = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
-    const unread = messages.filter(m => !m.read).length;
+    const blogs = JSON.parse(localStorage.getItem('portfolio_blogs') || '[]');
     const skills = JSON.parse(localStorage.getItem('portfolio_skills') || '[]');
-    const skillCount = skills.reduce((acc, cat) => acc + cat.items.length, 0);
+    const skillCount = skills.reduce((acc, cat) => acc + (cat?.items?.length || 0), 0);
 
     return (
         <div>
@@ -51,8 +53,8 @@ const OverviewTab = ({ onNavigate }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <StatCard label="Projects" value={projects.length || '4'} color="cyan" />
                 <StatCard label="Skills" value={skillCount || '12'} color="blue" />
-                <StatCard label="Messages" value={messages.length} color="purple" />
-                <StatCard label="Unread" value={unread} color="green" />
+                <StatCard label="Blogs" value={blogs.length || '3'} color="green" />
+                <StatCard label="Inbox Messages" value={messages.length} color="purple" />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
                 {tabs.slice(1).map(tab => (
@@ -94,6 +96,7 @@ const AdminDashboard = ({ onLogout }) => {
             case 'stats': return <StatsTab />;
             case 'projects': return <ProjectsTab />;
             case 'skills': return <SkillsTab />;
+            case 'blogs': return <BlogsTab />;
             case 'media': return <MediaTab />;
             case 'messages': return <MessagesTab />;
             case 'theme': return <ThemeTab />;

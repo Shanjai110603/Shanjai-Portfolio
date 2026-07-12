@@ -30,4 +30,5 @@ export const STORAGE_KEYS = {
     media: 'portfolio_media',
     messages: 'portfolio_messages',
     testimonials: 'portfolio_testimonials',
+    blogs: 'portfolio_blogs',
 };

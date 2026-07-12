@@ -150,7 +150,7 @@ const Projects = () => {
                     >
                     {filtered.map((project, index) => (
 
-                        <Tilt key={project.id ?? index} tiltMaxAngleX={4} tiltMaxAngleY={4} scale={1} transitionSpeed={2000}>
+                        <Tilt key={project.id ?? index} tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} className="h-full">
                             <motion.div
                                 initial={{ opacity: 0, y: 40, rotateX: -15, scale: 0.95 }}
                                 whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}

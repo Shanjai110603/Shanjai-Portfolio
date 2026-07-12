@@ -15,7 +15,7 @@ const Navbar = ({ siteInfo }) => {
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 30);
-            const sections = ['home', 'about', 'skills', 'projects', 'experience', 'education', 'contact'];
+            const sections = ['home', 'about', 'skills', 'projects', 'experience', 'education', 'blog', 'playground', 'contact'];
             const current = sections.find(sec => {
                 const el = document.getElementById(sec);
                 if (el) {
@@ -30,15 +30,19 @@ const Navbar = ({ siteInfo }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const globalSettings = siteInfo?.globalSettings || {};
+
     const navLinks = [
         { name: 'Home', id: 'home' },
-        { name: 'About', id: 'about' },
-        { name: 'Skills', id: 'skills' },
-        { name: 'Projects', id: 'projects' },
-        { name: 'Experience', id: 'experience' },
-        { name: 'Education', id: 'education' },
-        { name: 'Contact', id: 'contact' },
-    ];
+        { name: 'About', id: 'about', show: globalSettings.showAbout !== false },
+        { name: 'Skills', id: 'skills', show: globalSettings.showSkills !== false },
+        { name: 'Projects', id: 'projects', show: globalSettings.showProjects !== false },
+        { name: 'Experience', id: 'experience', show: globalSettings.showExperience !== false },
+        { name: 'Education', id: 'education', show: globalSettings.showEducation !== false },
+        { name: 'Blog', id: 'blog', show: globalSettings.showBlogs },
+        { name: 'Playground', id: 'playground', show: globalSettings.showPlayground },
+        { name: 'Contact', id: 'contact', show: globalSettings.showContact !== false },
+    ].filter(link => link.show !== false);
 
     const scrollTo = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });

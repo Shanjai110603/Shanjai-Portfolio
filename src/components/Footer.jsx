@@ -11,14 +11,17 @@ const Footer = ({ siteInfo }) => {
     const githubUser = siteInfo?.githubUsername || SITE.githubUsername;
     const linkedinUser = linkedinLink.split('/').filter(Boolean).pop() || 'linkedin';
     const emailUser = siteEmail.split('@')[0] || 'email';
+    const globalSettings = siteInfo?.globalSettings || {};
     const navLinks = [
         { name: 'Home', id: 'home' },
-        { name: 'About', id: 'about' },
-        { name: 'Skills', id: 'skills' },
-        { name: 'Projects', id: 'projects' },
-        { name: 'Experience', id: 'experience' },
-        { name: 'Contact', id: 'contact' },
-    ];
+        { name: 'About', id: 'about', show: globalSettings.showAbout !== false },
+        { name: 'Skills', id: 'skills', show: globalSettings.showSkills !== false },
+        { name: 'Projects', id: 'projects', show: globalSettings.showProjects !== false },
+        { name: 'Experience', id: 'experience', show: globalSettings.showExperience !== false },
+        { name: 'Blog', id: 'blog', show: globalSettings.showBlogs },
+        { name: 'Playground', id: 'playground', show: globalSettings.showPlayground },
+        { name: 'Contact', id: 'contact', show: globalSettings.showContact !== false },
+    ].filter(link => link.show !== false);
 
     const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 

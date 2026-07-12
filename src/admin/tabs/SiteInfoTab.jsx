@@ -33,6 +33,8 @@ const defaultSiteInfo = {
         showProjects: true,
         showExperience: true,
         showEducation: true,
+        showBlogs: true,
+        showPlayground: true,
         showContact: true,
         enableAnimatedBackground: true,
         globalTheme: 'cyan'
@@ -166,6 +168,8 @@ const SiteInfoTab = () => {
                                 { k: 'showProjects', label: 'Projects Grid' },
                                 { k: 'showExperience', label: 'Experience Timeline' },
                                 { k: 'showEducation', label: 'Education & Certs' },
+                                { k: 'showBlogs', label: 'Blogs Feed' },
+                                { k: 'showPlayground', label: 'Playground Sandbox' },
                                 { k: 'showContact', label: 'Contact Form' },
                             ].map(sec => (
                                 <label key={sec.k} className="flex items-center gap-3 p-3 bg-gray-950/50 rounded-lg border border-gray-800/50 cursor-pointer hover:border-gray-700 transition-colors">

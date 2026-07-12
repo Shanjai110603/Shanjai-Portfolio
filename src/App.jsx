@@ -24,6 +24,8 @@ const Projects = lazy(() => import('./sections/Projects'));
 const GitHubStats = lazy(() => import('./sections/GitHubStats'));
 const Experience = lazy(() => import('./sections/Experience'));
 const Education = lazy(() => import('./sections/Education'));
+const Blog = lazy(() => import('./sections/Blog'));
+const Playground = lazy(() => import('./sections/Playground'));
 const Contact = lazy(() => import('./sections/Contact'));
 
 // Route-level chunks
@@ -98,6 +100,8 @@ const Portfolio = () => {
           <GitHubStats siteInfo={siteInfo} />
           {globalSettings.showExperience && <Experience />}
           {globalSettings.showEducation && <Education />}
+          {globalSettings.showBlogs && <Blog />}
+          {globalSettings.showPlayground && <Playground />}
           {globalSettings.showContact && <Contact siteInfo={siteInfo} />}
         </Suspense>
       </main>
