@@ -12,39 +12,29 @@ const isEmpty = (val) => {
 };
 
 export const fetchPortfolioData = async (id, defaultData = {}) => {
-    // 1. Try localStorage first — always works, instant
+    // 1. Try Supabase first (blocking but accurate)
+    try {
+        const remote = await syncFromSupabase(id, defaultData);
+        if (remote && !isEmpty(remote)) {
+            localStorage.setItem(id, JSON.stringify(remote));
+            return remote;
+        }
+    } catch (e) {
+        console.warn('Supabase fetch failed, checking local storage fallback:', e);
+    }
+
+    // 2. Fallback to localStorage if offline or db not ready
     try {
         const local = localStorage.getItem(id);
         if (local) {
-            let parsed = JSON.parse(local);
-            const localIsEmpty = isEmpty(parsed);
-            if (localIsEmpty) {
-                parsed = defaultData;
+            const parsed = JSON.parse(local);
+            if (!isEmpty(parsed)) {
+                return parsed;
             }
-
-            // Background-sync from Supabase (non-blocking)
-            syncFromSupabase(id, defaultData).then(remote => {
-                const remoteIsEmpty = isEmpty(remote);
-                if (remoteIsEmpty && !localIsEmpty) {
-                    // Push local data to Supabase to initialize it!
-                    savePortfolioData(id, parsed);
-                } else if (!remoteIsEmpty) {
-                    // Update localStorage with remote data
-                    localStorage.setItem(id, JSON.stringify(remote));
-                }
-            });
-            return parsed;
         }
     } catch {}
 
-    // 2. Try Supabase if nothing in localStorage
-    const remote = await syncFromSupabase(id, defaultData);
-    if (!isEmpty(remote)) {
-        localStorage.setItem(id, JSON.stringify(remote));
-        return remote;
-    }
-
-    // Fallback to defaultData and auto-initialize Supabase
+    // 3. Fallback to defaultData
     try {
         localStorage.setItem(id, JSON.stringify(defaultData));
         savePortfolioData(id, defaultData);
