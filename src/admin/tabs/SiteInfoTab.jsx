@@ -37,6 +37,9 @@ const defaultSiteInfo = {
         showPlayground: true,
         showContact: true,
         enableAnimatedBackground: true,
+        enable3DSphere: true,
+        enableTechMarquee: true,
+        enableTerminalHUD: true,
         globalTheme: 'cyan'
     }
 };
@@ -122,12 +125,32 @@ const SiteInfoTab = () => {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
                         <h3 className="text-sm font-semibold text-green-400 mb-4 flex items-center gap-2"><Settings2 size={16}/> Features & Effects</h3>
                         
-                        <div className="p-4 bg-gray-950/50 rounded-lg border border-gray-800/50 space-y-3">
+                        <div className="p-4 bg-gray-950/50 rounded-lg border border-gray-800/50 space-y-4">
                             <label className="flex items-center justify-between cursor-pointer group">
                                 <span className="text-sm text-gray-300 group-hover:text-white transition-colors">Interactive Animated Background</span>
                                 <input type="checkbox" checked={info.globalSettings?.enableAnimatedBackground} onChange={e => setGlobal('enableAnimatedBackground', e.target.checked)} className="w-4 h-4 accent-green-500 rounded bg-gray-900 border-gray-700" />
                             </label>
-                            <p className="text-xs text-gray-500 mt-1 pl-1">Toggles the global mouse aura and trailing dot matrix background effect.</p>
+                            
+                            <div className="h-px w-full bg-gray-800/40" />
+                            
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <span className="text-sm text-gray-300 group-hover:text-white transition-colors">Hero 3D Particle Sphere</span>
+                                <input type="checkbox" checked={info.globalSettings?.enable3DSphere} onChange={e => setGlobal('enable3DSphere', e.target.checked)} className="w-4 h-4 accent-green-500 rounded bg-gray-900 border-gray-700" />
+                            </label>
+                            
+                            <div className="h-px w-full bg-gray-800/40" />
+                            
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <span className="text-sm text-gray-300 group-hover:text-white transition-colors">Infinite Tech Marquee Scroller</span>
+                                <input type="checkbox" checked={info.globalSettings?.enableTechMarquee} onChange={e => setGlobal('enableTechMarquee', e.target.checked)} className="w-4 h-4 accent-green-500 rounded bg-gray-900 border-gray-700" />
+                            </label>
+                            
+                            <div className="h-px w-full bg-gray-800/40" />
+                            
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <span className="text-sm text-gray-300 group-hover:text-white transition-colors">Floating Cyber Terminal console HUD</span>
+                                <input type="checkbox" checked={info.globalSettings?.enableTerminalHUD} onChange={e => setGlobal('enableTerminalHUD', e.target.checked)} className="w-4 h-4 accent-green-500 rounded bg-gray-900 border-gray-700" />
+                            </label>
                         </div>
                     </div>
 

@@ -4,6 +4,7 @@ import { ArrowRight, Download, Github, Linkedin, Mail, Sparkles } from 'lucide-r
 import { TypeAnimation } from 'react-type-animation';
 import Tilt from 'react-parallax-tilt';
 import ProfileImage from '../assets/profile.png';
+import InteractiveCanvas3D from '../components/InteractiveCanvas3D';
 
 const defaultHeroData = {
     statusBadge: "Open to Work · Freelance Ready",
@@ -275,9 +276,12 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
                             className="lg:w-1/2 flex justify-center relative mt-10 lg:mt-0 mb-12 lg:mb-0"
                         >
+                            {/* 3D Particle Sphere */}
+                            {data.globalSettings?.enable3DSphere !== false && <InteractiveCanvas3D />}
+
                             {/* Glow behind image */}
                             <div
-                                className="absolute inset-0 rounded-3xl opacity-40 blur-3xl scale-75"
+                                className="absolute inset-0 rounded-3xl opacity-40 blur-3xl scale-75 pointer-events-none"
                                 style={{ background: 'linear-gradient(135deg, rgb(var(--theme-secondary-500)), rgb(var(--theme-primary-500)))' }}
                             />
 

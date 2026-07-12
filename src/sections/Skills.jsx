@@ -129,6 +129,7 @@ const Skills = () => {
             return defaultSkillsData;
         }
     });
+    const [settings, setSettings] = useState({});
 
     useEffect(() => {
         fetchPortfolioData(SKILLS_KEY, defaultSkillsData).then(res => {
@@ -136,8 +137,14 @@ const Skills = () => {
                 setSkillsData(res);
             }
         });
+        fetchPortfolioData(STORAGE_KEYS.siteInfo).then(info => {
+            if (info && info.globalSettings) {
+                setSettings(info.globalSettings);
+            }
+        });
     }, []);
 
+    const marqueeItems = ['C++', 'Python', 'React', 'JavaScript', 'Node.js', 'MySQL', 'Git', 'HTML5', 'CSS3', 'REST APIs', 'Supabase', 'Framer Motion', 'MATLAB'];
 
     return (
         <section id="skills" className="py-28 relative overflow-hidden">
@@ -153,7 +160,7 @@ const Skills = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center mb-20"
+                    className="text-center mb-16"
                 >
                     <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">What I Know</p>
                     <h2 className="text-4xl md:text-5xl font-archivo font-black text-white mb-4">
@@ -162,8 +169,39 @@ const Skills = () => {
                             Skills
                         </span>
                     </h2>
-                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500" />
+                    <div className="w-16 h-1 rounded-full mx-auto bg-gradient-to-r from-blue-500 to-cyan-500 mb-8" />
                 </motion.div>
+
+                {/* Infinite Tech Marquee */}
+                {settings.enableTechMarquee !== false && (
+                    <div className="w-full overflow-hidden py-5 bg-gray-950/20 border-y border-white/5 mb-16 relative select-none rounded-xl">
+                        <div className="flex w-[200%] gap-10 marquee-animation">
+                            <div className="flex justify-around min-w-full shrink-0 gap-10 items-center">
+                                {marqueeItems.map((item, idx) => (
+                                    <span key={idx} className="text-lg md:text-xl font-bold text-gray-500 hover:text-[rgb(var(--theme-primary-400))] transition-colors font-mono tracking-wider">
+                                        // {item}
+                                    </span>
+                                ))}
+                            </div>
+                            <div className="flex justify-around min-w-full shrink-0 gap-10 items-center">
+                                {marqueeItems.map((item, idx) => (
+                                    <span key={`dup-${idx}`} className="text-lg md:text-xl font-bold text-gray-500 hover:text-[rgb(var(--theme-primary-400))] transition-colors font-mono tracking-wider">
+                                        // {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <style>{`
+                            .marquee-animation {
+                                animation: marquee 30s linear infinite;
+                            }
+                            @keyframes marquee {
+                                0% { transform: translateX(0%); }
+                                100% { transform: translateX(-50%); }
+                            }
+                        `}</style>
+                    </div>
+                )}
 
                 <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                     {(Array.isArray(skillsData) ? skillsData : []).map((category, catIndex) => {

@@ -15,6 +15,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import FloatingContact from './components/FloatingContact';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
+import CyberTerminal from './components/CyberTerminal';
 
 // Lazy-load everything below the fold → faster initial paint
 const Stats = lazy(() => import('./sections/Stats'));
@@ -109,6 +110,7 @@ const Portfolio = () => {
       <FloatingContact siteInfo={siteInfo} />
       <HireMeCTA />
       <ScrollToTop />
+      {globalSettings.enableTerminalHUD !== false && <CyberTerminal />}
     </div>
   );
 };
