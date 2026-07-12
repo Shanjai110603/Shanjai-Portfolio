@@ -121,13 +121,16 @@ const SnakeGame = () => {
             // Check collision with wall
             const cols = gridCountRef.current.cols;
             const rows = gridCountRef.current.rows;
+            console.log('CHECK COLLISION FOR HEAD:', nextHead, 'cols:', cols, 'rows:', rows, 'dir:', dir);
             if (nextHead[0] < 0 || nextHead[0] >= cols || nextHead[1] < 0 || nextHead[1] >= rows) {
+                console.warn('COLLIDED WITH WALL! nextHead:', nextHead, 'cols:', cols, 'rows:', rows);
                 endGame('wall_collision');
                 return;
             }
 
             // Check collision with self
             if (snake.some(segment => segment[0] === nextHead[0] && segment[1] === nextHead[1])) {
+                console.warn('COLLIDED WITH SELF! nextHead:', nextHead, 'Snake:', snake);
                 endGame('self_collision');
                 return;
             }
@@ -193,11 +196,24 @@ const SnakeGame = () => {
             ctx.stroke();
         }
 
+        // Parse CSS variables dynamically (canvas does not support raw CSS var injection)
+        const style = getComputedStyle(document.documentElement);
+        const getRGB = (varName, fallback) => {
+            const raw = style.getPropertyValue(varName).trim();
+            if (!raw) return fallback;
+            return raw.replace(/\s+/g, ', ');
+        };
+
+        const primaryRGB = getRGB('--theme-primary-500', '6, 182, 212');
+        const primaryLightRGB = getRGB('--theme-primary-400', '34, 211, 238');
+        const secondaryRGB = getRGB('--theme-secondary-500', '59, 130, 246');
+        const secondaryLightRGB = getRGB('--theme-secondary-400', '96, 165, 250');
+
         // Draw Food (Neon digital dot)
         const food = foodRef.current;
         ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgb(var(--theme-secondary-500))';
-        ctx.fillStyle = 'rgb(var(--theme-secondary-400))';
+        ctx.shadowColor = `rgb(${secondaryRGB})`;
+        ctx.fillStyle = `rgb(${secondaryLightRGB})`;
         ctx.beginPath();
         ctx.arc(food[0] * cellW + cellW/2, food[1] * cellH + cellH/2, cellW/2.8, 0, Math.PI * 2);
         ctx.fill();
@@ -208,8 +224,8 @@ const SnakeGame = () => {
         snake.forEach((segment, index) => {
             const isHead = index === 0;
             ctx.fillStyle = isHead 
-                ? 'rgb(var(--theme-primary-400))'
-                : 'rgba(var(--theme-primary-500), ' + (0.9 - (index / snake.length) * 0.6) + ')';
+                ? `rgb(${primaryLightRGB})`
+                : `rgba(${primaryRGB}, ${0.9 - (index / snake.length) * 0.6})`;
             
             // Add slight rounded corners
             const x = segment[0] * cellW + 1;
